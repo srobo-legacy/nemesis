@@ -74,6 +74,10 @@ def set_user_details(userid):
             instance.set_first_name(request.form["new_first_name"])
         if request.form.has_key("new_last_name"):
             instance.set_last_name(request.form["new_last_name"])
+        if request.form.has_key("new_team"):
+            team = request.form["new_team"]
+            if not instance.is_blueshirt and team in [t.name for t in ah.user.teams]:
+                instance.set_team(team)
 
         instance.save()
         return '{}', 200
