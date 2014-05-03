@@ -30,9 +30,7 @@ def send_email(toaddr, subject, msg):
 
     return len(r) > 0
 
-def send_email_template(toaddr, template_name, template_vars):
-    logging.info("about to send '{0}' to '{1}'.".format(template_name, toaddr))
-
+def load_template(template_name, template_vars):
     script_dir = os.path.dirname(os.path.abspath(__file__))
     temp_path = os.path.join(script_dir, "templates", template_name + ".txt")
 
@@ -44,6 +42,13 @@ def send_email_template(toaddr, template_name, template_vars):
 
     msg = "\n".join(msg.splitlines()[1:])
     msg = msg.format(**template_vars)
+
+    return subject, msg
+
+def send_email_template(toaddr, template_name, template_vars):
+    logging.info("about to send '{0}' to '{1}'.".format(template_name, toaddr))
+
+    subject, msg = load_template(template_name, template_vars)
 
     return send_email(toaddr, subject, msg)
 
