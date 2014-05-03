@@ -193,8 +193,6 @@ class PendingUser(AgedUsernameKeyedSqliteThing):
 
     def send_welcome_email(self, first_name, activation_url):
         email_vars = { 'name': first_name,
-                   'username': self.username,
-                      'email': self.email,
             'activation_days': config.getint('nemesis', 'activation_days'),
              'activation_url': activation_url
                      }
