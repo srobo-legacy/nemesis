@@ -58,10 +58,12 @@ def email_used(email):
 ## Helpers created for tidying things up, mainly for use in cron
 
 def clear_old_emails():
+    # deliberately a larger delta than we restrict against to avoid
+    # accidentally removing vaild entries
+    max_age = timedelta(days = 3)
+
     for pe in PendingEmail.ListAll():
-        # deliberately a larger delta than we restrict against to avoid
-        # accidentally removing vaild entries
-        if pe.age > timedelta(days = 3):
+        if pe.age > max_age:
             log_action('expiring email change', pe)
             pe.delete()
 
@@ -75,10 +77,12 @@ def inform_team_lead_registration_expired(team_leader, expired_user):
     mailer.email_template(team_leader.email, 'registration_expired', email_vars)
 
 def clear_old_registrations():
+    # deliberately a larger delta than we restrict against to avoid
+    # accidentally removing vaild entries
+    max_age = timedelta(days = 3)
+
     for pu in PendingUser.ListAll():
-        # deliberately a larger delta than we restrict against to avoid
-        # accidentally removing vaild entries
-        if pu.age > timedelta(days = 3):
+        if pu.age > max_age:
             log_action('expiring registration', pu)
             pu.delete()
             expired = User(pu.username)
