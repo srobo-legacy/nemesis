@@ -9,7 +9,7 @@ import os
 
 sys.path.insert(0,os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from common_test_helpers import delete_db, last_email, assert_load_template
+from common_test_helpers import delete_db, last_n_emails, assert_load_template
 
 import helpers
 from sqlitewrapper import PendingUser, PendingEmail, sqlite_connect
@@ -61,10 +61,11 @@ class TestHelpers(unittest.TestCase):
     def test_clear_old_registrations(self):
         first_name = 'old'
         last_name = 'user'
+        email = 'old@srobo.org'
         old_user = srusers.user('old')
         old_user.cname = first_name
         old_user.sname = last_name
-        old_user.email = ''
+        old_user.email = email
         old_user.save()
 
         old_team_leader = User('teacher_coll1')
@@ -95,7 +96,23 @@ class TestHelpers(unittest.TestCase):
         pu = PendingUser('abc')
         assert pu.in_db
 
-        ps = last_email()
+        emails = last_n_emails(2)
+
+        # Check we emailed the competitor
+        ps = emails[0]
+        toaddr = ps.toaddr
+        assert email == toaddr
+
+        vars = ps.template_vars
+        assert first_name == vars['name']
+
+        template = ps.template_name
+        assert template == 'registration_expired'
+
+        assert_load_template(template, vars)
+
+        # Check we emailed the team leader
+        ps = emails[1]
         toaddr = ps.toaddr
         team_lead_email = old_team_leader.email
         assert toaddr == team_lead_email
@@ -107,7 +124,7 @@ class TestHelpers(unittest.TestCase):
         assert last_name == vars['pu_last_name']
 
         template = ps.template_name
-        assert template == 'registration_expired'
+        assert template == 'registration_expired_team_leader'
 
         assert_load_template(template, vars)
 

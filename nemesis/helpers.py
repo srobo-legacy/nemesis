@@ -70,6 +70,12 @@ def clear_old_emails():
             log_action('expiring email change', pe)
             pe.delete()
 
+def inform_competitor_registration_expired(expired_user):
+
+    email_vars = { 'name': expired_user.first_name }
+
+    mailer.email_template(expired_user.email, 'registration_expired', email_vars)
+
 def inform_team_lead_registration_expired(team_leader, expired_user):
 
     email_vars = { 'name': team_leader.first_name,
@@ -77,7 +83,7 @@ def inform_team_lead_registration_expired(team_leader, expired_user):
            'pu_last_name': expired_user.last_name
                  }
 
-    mailer.email_template(team_leader.email, 'registration_expired', email_vars)
+    mailer.email_template(team_leader.email, 'registration_expired_team_leader', email_vars)
 
 def clear_old_registrations():
     # deliberately a larger delta than we restrict against to avoid
@@ -93,6 +99,7 @@ def clear_old_registrations():
             expired = User(pu.username)
             expired.delete()
 
+            inform_competitor_registration_expired(expired)
             team_leader = User(pu.teacher_username)
             inform_team_lead_registration_expired(team_leader, expired)
 
