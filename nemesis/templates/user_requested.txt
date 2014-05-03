@@ -4,7 +4,7 @@ Hello {name},
 This email confirms that you've just requested the creation of a user account
 with the following details. We've emailed the user so they can activate
 their account, but you should let them know as well, since the link will
-expire in a couple of days.
+expire in {activation_days} days.
 
 Their name is: {pu_first_name} {pu_last_name}
 Their username is: {pu_username}

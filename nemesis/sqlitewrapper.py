@@ -4,6 +4,7 @@ import json
 import os
 import sqlite3
 
+from config import config
 import mailer
 
 PATH = os.path.dirname(os.path.abspath(__file__))
@@ -179,6 +180,7 @@ class PendingEmail(AgedUsernameKeyedSqliteThing):
 
     def send_verification_email(self, first_name, verification_url):
         email_vars = { 'name': first_name,
+            'activation_days': config.getint('nemesis', 'activation_days'),
                         'url': verification_url }
         mailer.email_template(self.new_email, 'change_email', email_vars)
 
@@ -193,6 +195,7 @@ class PendingUser(AgedUsernameKeyedSqliteThing):
         email_vars = { 'name': first_name,
                    'username': self.username,
                       'email': self.email,
+            'activation_days': config.getint('nemesis', 'activation_days'),
              'activation_url': activation_url
                      }
 

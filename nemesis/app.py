@@ -22,10 +22,13 @@ from sqlitewrapper import PendingEmail, PendingUser
 config.configure_logging()
 app = Flask(__name__)
 
+ACTIVATION_DAYS = config.config.getint('nemesis', 'activation_days')
 
 @app.route("/")
 def index():
-    return open(PATH + '/templates/index.html').read()
+    text = open(PATH + '/templates/index.html').read()
+    text = text.replace('$ACTIVATION_DAYS$', str(ACTIVATION_DAYS))
+    return text
 
 @app.route("/site/sha")
 def sha():
@@ -84,6 +87,7 @@ def register_user():
     pu.send_welcome_email(first_name, url)
 
     rqu_email_vars = { 'name': requesting_user.first_name,
+            'activation_days': ACTIVATION_DAYS,
               'pu_first_name': first_name,
                'pu_last_name': last_name,
                 'pu_username': pu.username,
@@ -211,7 +215,7 @@ def activate_account(username, code):
     if not pu.in_db:
         return "No such user account", 404
 
-    if pu.age > timedelta(days = 2):
+    if pu.age > timedelta(days = ACTIVATION_DAYS):
         return "Request not valid", 410
 
     if pu.verify_code != code:
@@ -276,7 +280,10 @@ def verify_email(username, code):
     if not change_request.in_db:
         return "No such change request", 404
 
-    if change_request.age > timedelta(days = 2):
+    email_change_days = config.config.getint('nemesis', 'email_change_days')
+    max_age = timedelta(days = email_change_days)
+
+    if change_request.age > max_age:
         return "Request not valid", 410
 
     if change_request.verify_code != code:

@@ -8,6 +8,7 @@ import os
 import sys
 from unidecode import unidecode
 
+from config import config
 import mailer
 from sqlitewrapper import PendingEmail, PendingSend, PendingUser
 
@@ -60,7 +61,9 @@ def email_used(email):
 def clear_old_emails():
     # deliberately a larger delta than we restrict against to avoid
     # accidentally removing vaild entries
-    max_age = timedelta(days = 3)
+    email_change_days = config.getint('nemesis', 'email_change_days')
+    email_change_days += 0.5
+    max_age = timedelta(days = email_change_days)
 
     for pe in PendingEmail.ListAll():
         if pe.age > max_age:
@@ -79,7 +82,9 @@ def inform_team_lead_registration_expired(team_leader, expired_user):
 def clear_old_registrations():
     # deliberately a larger delta than we restrict against to avoid
     # accidentally removing vaild entries
-    max_age = timedelta(days = 3)
+    activation_days = config.getint('nemesis', 'activation_days')
+    activation_days += 0.5
+    max_age = timedelta(days = activation_days)
 
     for pu in PendingUser.ListAll():
         if pu.age > max_age:

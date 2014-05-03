@@ -10,6 +10,7 @@ import test_helpers
 
 sys.path.append("../../nemesis")
 from sqlitewrapper import PendingEmail, sqlite_connect
+from config import config
 
 sys.path.append("../../nemesis/libnemesis")
 from libnemesis import User
@@ -183,7 +184,8 @@ def test_verify_outdated_request():
     conn = sqlite_connect()
     cur = conn.cursor()
     statement = "INSERT INTO email_changes (username, new_email, request_time, verify_code) VALUES (?,?,?, ?)"
-    old = datetime.datetime.now() - datetime.timedelta(days = 4)
+    days = config.getint('nemesis', 'email_change_days')
+    old = datetime.datetime.now() - datetime.timedelta(days = days + 2)
     arguments = ('abc', 'nope@srobo.org', old.strftime('%Y-%m-%d %H:%M:%S'), 'bees')
     cur.execute(statement, arguments)
     conn.commit()
