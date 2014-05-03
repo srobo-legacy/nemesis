@@ -1,5 +1,8 @@
 #!/bin/sh
 
+echo "Resetting LDAP"
+python nemesis/libnemesis/tests/reset_ldap.py
+
 echo "Nose API and Unit tests"
 nosetests test/api-tests/ test/unit-tests/
 result=$?
