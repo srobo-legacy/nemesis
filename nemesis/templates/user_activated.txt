@@ -1,0 +1,34 @@
+Subject:Student Robotics user account activated
+Hello {first_name},
+
+Congratulations, you've activated your Student Robotics user account.
+
+You now have access to Student Robotics' online facilities:
+
+ * The IDE will let you develop the software for your robots:
+	https://www.studentrobotics.org/ide
+
+ * The forums will let you discuss things with other teams and the mentors,
+   as well as get advice on how to build your robot:
+	https://www.studentrobotics.org/forum
+
+ * The docs contain all the information you should need use your kit:
+	https://www.studentrobotics.org/docs
+
+Your account details:
+
+  Your username is: {username}
+  Your registered email address is: {email}.
+  Your registered name is: {first_name} {last_name}
+
+If you have any problems with your account then please ask your team-leader.
+
+So go introduce yourself to everyone on the forums, and enjoy building
+your robots.
+
+Thanks,
+
+The Student Robotics Team
+
+Please note: this is an automated email, and the account it was sent from
+is unable to reply.

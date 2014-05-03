@@ -230,6 +230,15 @@ def activate_account(username, code):
     u.make_student()
     u.save()
 
+    # confirm the details to the competitor
+    email_vars = {
+        'username': username,
+           'email': u.email,
+      'first_name': u.first_name,
+       'last_name': u.last_name
+    }
+    mailer.email_template(u.email, 'user_activated', email_vars)
+
     # let the team-leader know
     rq_user = User.create_user(pu.teacher_username)
     email_vars = { 'name': rq_user.first_name,
