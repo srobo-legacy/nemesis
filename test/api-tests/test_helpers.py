@@ -9,7 +9,10 @@ import os
 
 sys.path.insert(0,os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from common_test_helpers import apache_mode, delete_db, get_registrations, assert_no_emails, last_email, last_n_emails, remove_user, root, template
+from common_test_helpers import apache_mode, delete_db, get_registrations, \
+                                assert_no_emails, last_email, last_n_emails, \
+                                remove_user, root, \
+                                assert_load_template, template
 
 def make_connection():
     if not apache_mode():

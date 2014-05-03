@@ -9,7 +9,7 @@ import os
 
 sys.path.insert(0,os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from common_test_helpers import delete_db, last_email
+from common_test_helpers import delete_db, last_email, assert_load_template
 
 import helpers
 from sqlitewrapper import PendingUser, PendingEmail, sqlite_connect
@@ -108,6 +108,8 @@ class TestHelpers(unittest.TestCase):
 
         template = ps.template_name
         assert template == 'registration_expired'
+
+        assert_load_template(template, vars)
 
     def test_is_email_used_no(self):
         email = 'nope@srobo.org'

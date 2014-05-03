@@ -116,6 +116,8 @@ def test_send_email():
     template = ps.template_name
     assert template == 'change_email'
 
+    test_helpers.assert_load_template(template, vars)
+
 @raises(AttributeError)
 def test_invalid_property():
     pe = PendingEmail('abc')

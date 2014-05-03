@@ -87,3 +87,5 @@ def test_activate_success():
 
     template = ps.template_name
     assert template == 'user_activated_team_leader'
+
+    test_helpers.assert_load_template(template, vars)

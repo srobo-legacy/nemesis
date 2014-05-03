@@ -54,6 +54,8 @@ def test_registration_user_and_form():
     vcode = pending.verify_code
     assert vcode in vars['activation_url']
 
+    test_helpers.assert_load_template(template, vars)
+
     teacher = User.create_user("teacher_coll1")
 
     teacher_ps = email_datas[1]
@@ -71,6 +73,8 @@ def test_registration_user_and_form():
 
     vars_str = teacher_ps.template_vars_json
     assert vcode not in vars_str, "Should not contain the verification code."
+
+    test_helpers.assert_load_template(template, vars)
 
 @with_setup(remove_user('1_rt1'), remove_user('1_rt1'))
 @with_setup(test_helpers.delete_db, test_helpers.delete_db)
@@ -108,6 +112,8 @@ def test_registration_rq_from_blueshirt():
     vcode = pending.verify_code
     assert vcode in vars['activation_url']
 
+    test_helpers.assert_load_template(template, vars)
+
     teacher = User.create_user("blueshirt")
 
     teacher_ps = email_datas[1]
@@ -125,6 +131,8 @@ def test_registration_rq_from_blueshirt():
 
     vars_str = teacher_ps.template_vars_json
     assert vcode not in vars_str, "Should not contain the verification code."
+
+    test_helpers.assert_load_template(template, vars)
 
 @with_setup(remove_user('2_rt1'), remove_user('2_rt1'))
 @with_setup(test_helpers.delete_db, test_helpers.delete_db)

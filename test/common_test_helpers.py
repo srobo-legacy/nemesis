@@ -10,6 +10,7 @@ sys.path.insert(0,os.path.join(root(), "nemesis/libnemesis"))
 sys.path.insert(0,os.path.join(root(), 'nemesis'))
 
 from sqlitewrapper import PendingEmail, PendingSend, sqlite_connect
+from mailer import load_template
 
 from libnemesis import srusers
 
@@ -68,8 +69,16 @@ def assert_no_emails():
     row = cur.fetchone()
     assert row is None, "Should not be any emails in SQLite."
 
+def assert_load_template(name, vars_):
+    template(name + ".txt")
+    subject, msg = load_template(name, vars_)
+    assert subject
+    assert msg
+    assert "{" not in msg
+
 def template(name):
     file_path = os.path.join(root(), 'nemesis/templates', name)
-    assert os.path.exists(file_path), "Cannot open a template that doesn't exist."
+    assert os.path.exists(file_path), \
+        "Cannot open a template {0} that doesn't exist.".format(name)
     with open(file_path, 'r') as f:
         return f.readlines()

@@ -47,6 +47,8 @@ def test_email_change_request():
     template = ps.template_name
     assert template == 'change_email'
 
+    test_helpers.assert_load_template(template, vars)
+
     pe = PendingEmail(username)
     assert pe.in_db
     assert pe.new_email == new_email
