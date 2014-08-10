@@ -5,7 +5,6 @@ PATH = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(PATH + "/libnemesis/")
 
 import subprocess
-import logging
 import json
 
 import config
