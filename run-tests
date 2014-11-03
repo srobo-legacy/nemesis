@@ -9,6 +9,6 @@ result=$?
 
 echo "Jasmine JS tests"
 jasmine-node test/js-tests
-result=$((result + $?))
+result=$((result | $?))
 
 exit $result
