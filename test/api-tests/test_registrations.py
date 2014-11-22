@@ -18,14 +18,12 @@ def test_registration_no_user():
     r,data = test_helpers.server_post("/registrations")
     assert r.status == 403
 
-@with_setup(remove_user('1_rt1'), remove_user('1_rt1'))
-@with_setup(test_helpers.delete_db, test_helpers.delete_db)
-def test_registration_user_and_form():
+def form_helper(rq_user, rq_pass, new_fname, new_lname):
     new_email = "bob@example.com"
-    params = {"username":"teacher_coll1",
-              "password":"facebees",
-              "first_name":NEW_USER_FNAME,
-              "last_name":NEW_USER_LNAME,
+    params = {"username":rq_user,
+              "password":rq_pass,
+              "first_name":new_fname,
+              "last_name":new_lname,
               "email":new_email,
               "team":"team-ABC",
               "college":"college-1"}
@@ -50,13 +48,13 @@ def test_registration_user_and_form():
     to = student_ps.toaddr
     assert to == new_email
     vars = student_ps.template_vars
-    assert NEW_USER_FNAME == vars['name']
+    assert new_fname == vars['name']
     vcode = pending.verify_code
     assert vcode in vars['activation_url']
 
     test_helpers.assert_load_template(template, vars)
 
-    teacher = User.create_user("teacher_coll1")
+    teacher = User.create_user(rq_user)
 
     teacher_ps = email_datas[1]
     template = teacher_ps.template_name
@@ -64,8 +62,8 @@ def test_registration_user_and_form():
     to = teacher_ps.toaddr
     assert to == teacher.email
     vars = teacher_ps.template_vars
-    assert NEW_USER_FNAME == vars['pu_first_name']
-    assert NEW_USER_LNAME == vars['pu_last_name']
+    assert new_fname == vars['pu_first_name']
+    assert new_lname == vars['pu_last_name']
     assert new_email == vars['pu_email']
     assert '1_rt1' == vars['pu_username']
     assert 'team-ABC' == vars['pu_team']
@@ -75,64 +73,16 @@ def test_registration_user_and_form():
     assert vcode not in vars_str, "Should not contain the verification code."
 
     test_helpers.assert_load_template(template, vars)
+
+@with_setup(remove_user('1_rt1'), remove_user('1_rt1'))
+@with_setup(test_helpers.delete_db, test_helpers.delete_db)
+def test_registration_user_and_form():
+    form_helper("teacher_coll1", "facebees", NEW_USER_FNAME, NEW_USER_LNAME)
 
 @with_setup(remove_user('1_rt1'), remove_user('1_rt1'))
 @with_setup(test_helpers.delete_db, test_helpers.delete_db)
 def test_registration_rq_from_blueshirt():
-    new_email = "bob@example.com"
-    params = {"username":"blueshirt",
-              "password":"blueshirt",
-              "first_name":NEW_USER_FNAME,
-              "last_name":NEW_USER_LNAME,
-              "email":new_email,
-              "team":"team-ABC",
-              "college":"college-1"}
-
-    r,data = test_helpers.server_post("/registrations", params)
-    status = r.status
-    assert status == 202, data
-
-    created = User.create_user('1_rt1')
-    assert created.email == ''
-
-    pending = PendingUser('1_rt1')
-    assert pending.email == "bob@example.com"
-    assert pending.team == "team-ABC"
-    assert pending.college == "college-1"
-
-    email_datas = test_helpers.last_n_emails(2)
-
-    student_ps = email_datas[0]
-    template = student_ps.template_name
-    assert template == 'new_user'
-    to = student_ps.toaddr
-    assert to == new_email
-    vars = student_ps.template_vars
-    assert NEW_USER_FNAME == vars['name']
-    vcode = pending.verify_code
-    assert vcode in vars['activation_url']
-
-    test_helpers.assert_load_template(template, vars)
-
-    teacher = User.create_user("blueshirt")
-
-    teacher_ps = email_datas[1]
-    template = teacher_ps.template_name
-    assert template == 'user_requested'
-    to = teacher_ps.toaddr
-    assert to == teacher.email
-    vars = teacher_ps.template_vars
-    assert NEW_USER_FNAME == vars['pu_first_name']
-    assert NEW_USER_LNAME == vars['pu_last_name']
-    assert new_email == vars['pu_email']
-    assert '1_rt1' == vars['pu_username']
-    assert 'team-ABC' == vars['pu_team']
-    assert 'college the first' == vars['pu_college']
-
-    vars_str = teacher_ps.template_vars_json
-    assert vcode not in vars_str, "Should not contain the verification code."
-
-    test_helpers.assert_load_template(template, vars)
+    form_helper("blueshirt", "blueshirt", NEW_USER_FNAME, NEW_USER_LNAME)
 
 @with_setup(remove_user('2_rt1'), remove_user('2_rt1'))
 @with_setup(test_helpers.delete_db, test_helpers.delete_db)
