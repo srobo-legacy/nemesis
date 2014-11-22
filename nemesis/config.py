@@ -30,7 +30,7 @@ def configure_logging():
 
     logging.config.fileConfig(logging_ini)
 
-    logging.info("logging configured using '{0}'.".format(logging_ini))
+    logging.debug("logging configured using '{0}'.".format(logging_ini))
 
     _logging_configured = True
 
