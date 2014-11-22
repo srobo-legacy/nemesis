@@ -70,11 +70,11 @@ def clear_old_emails():
             log_action('expiring email change', pe)
             pe.delete()
 
-def inform_competitor_registration_expired(expired_user):
+def inform_competitor_registration_expired(user_email, expired_user):
 
     email_vars = { 'name': expired_user.first_name }
 
-    mailer.email_template(expired_user.email, 'registration_expired', email_vars)
+    mailer.email_template(user_email, 'registration_expired', email_vars)
 
 def inform_team_lead_registration_expired(team_leader, expired_user):
 
@@ -99,7 +99,7 @@ def clear_old_registrations():
             expired = User(pu.username)
             expired.delete()
 
-            inform_competitor_registration_expired(expired)
+            inform_competitor_registration_expired(pu.email, expired)
             team_leader = User(pu.teacher_username)
             inform_team_lead_registration_expired(team_leader, expired)
 

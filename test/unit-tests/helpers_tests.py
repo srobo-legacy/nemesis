@@ -61,20 +61,20 @@ class TestHelpers(unittest.TestCase):
     def test_clear_old_registrations(self):
         first_name = 'old'
         last_name = 'user'
-        email = 'old@srobo.org'
         old_user = srusers.user('old')
         old_user.cname = first_name
         old_user.sname = last_name
-        old_user.email = email
+        old_user.email = '' # match what libnemesis does when registering users
         old_user.save()
 
         old_team_leader = User('teacher_coll1')
 
         pu = PendingUser('old')
+        email = 'old@srobo.org'
         pu.teacher_username = old_team_leader.username
         pu.college = 'college-1'
         pu.team = 'team-ABC'
-        pu.email = 'nope@srobo.org'
+        pu.email = email
         pu.verify_code = 'bibble-old'
         pu.save()
 
