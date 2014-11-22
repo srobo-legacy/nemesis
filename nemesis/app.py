@@ -149,10 +149,13 @@ def set_user_details(userid):
         request_new_email(user_to_update, new_email)
     # Students aren't allowed to update their own names
     # at this point, if the ah.user is valid, we know it's a self-edit
-    if request.form.has_key("new_first_name") and not ah.user.is_student and request.form["new_first_name"] != '':
-        user_to_update.set_first_name(request.form["new_first_name"])
-    if request.form.has_key("new_last_name") and not ah.user.is_student and request.form["new_last_name"] != '':
-        user_to_update.set_last_name(request.form["new_last_name"])
+    if not ah.user.is_student:
+        fname = request.form.get("new_first_name")
+        if fname:
+            user_to_update.set_first_name(fname)
+        lname = request.form.get("new_last_name")
+        if lname:
+            user_to_update.set_last_name(lname)
     if request.form.has_key("new_team"):
         team = request.form["new_team"]
         if (not user_to_update.is_blueshirt) and ah.user.manages_team(team):
