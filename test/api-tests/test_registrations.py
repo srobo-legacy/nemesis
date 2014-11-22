@@ -81,6 +81,13 @@ def test_registration_user_and_form():
 
 @with_setup(remove_user('1_rt1'), remove_user('1_rt1'))
 @with_setup(test_helpers.delete_db, test_helpers.delete_db)
+def test_registration_form_unicode():
+    fname = u"reg\u2658"
+    lname = u"tom\u2658"
+    form_helper("teacher_coll1", "facebees", fname, lname)
+
+@with_setup(remove_user('1_rt1'), remove_user('1_rt1'))
+@with_setup(test_helpers.delete_db, test_helpers.delete_db)
 def test_registration_rq_from_blueshirt():
     form_helper("blueshirt", "blueshirt", NEW_USER_FNAME, NEW_USER_LNAME)
 

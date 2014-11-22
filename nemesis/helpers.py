@@ -32,6 +32,11 @@ def is_name_valid(name):
     first = unidecode(name[0])[0]
     return first.isalpha()
 
+def ensure_str(string):
+    if isinstance(string, unicode):
+        return string.encode('utf-8')
+    return string
+
 def create_verify_code(username, new_email):
     """
     An increadibly weak way of generating a 'random' looking string which
@@ -39,7 +44,8 @@ def create_verify_code(username, new_email):
     The aim here is mostly to check that it exists, so absolute security
     isn't strictly needed. The overall length is 160 characters.
     """
-    user_part = hashlib.md5(username + new_email).hexdigest()
+    combined = ensure_str(username) + ensure_str(new_email)
+    user_part = hashlib.md5(combined).hexdigest()
     random_part = hex(random.getrandbits(128))[2:-1]
     code = random_part + user_part
     return code

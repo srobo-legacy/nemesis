@@ -186,6 +186,36 @@ class TestValidityHelpers(unittest.TestCase):
             is_valid = helpers.is_name_valid(unicode(name))
             assert not is_valid, name
 
+class TestVerifyCodeHelpers(unittest.TestCase):
+    def assert_creates_code_inner(self, username, email):
+        code = helpers.create_verify_code(username, email)
+        assert username not in code, "Username should not be in code"
+        assert email not in code, "email address should not appear in the code"
+
+    def assert_creates_code(self, username, email):
+        self.assert_creates_code_inner(username, email)
+        self.assert_creates_code_inner(username.encode('utf-8'), email.encode('utf-8'))
+
+    def test_creates_code_str(self):
+        username = "username"
+        email = "nope@somewhere.com"
+        self.assert_creates_code_inner(username, email)
+
+    def test_creates_code_unicode(self):
+        username = u"username"
+        email = u"nope@somewhere.com"
+        self.assert_creates_code(username, email)
+
+    def test_creates_code_unicode_2(self):
+        username = u"usernam\xe9" # e acute
+        email = u"nope@somewhere.com"
+        self.assert_creates_code(username, email)
+
+    def test_creates_code_unicode_3(self):
+        username = u"username"
+        email = u"nop\u2658@somewhere.com"
+        self.assert_creates_code(username, email)
+
 class TestHelpersLogging(unittest.TestCase):
 
     def setUp(self):
