@@ -24,6 +24,11 @@ def log_action(action, *args, **kwargs):
     logging.info("{0}: {1}".format(action, details))
 
 def is_email_valid(email):
+    try:
+        # Don't allow any interesting characters -- we can't send to them.
+        str(email)
+    except:
+        return False
     return re.match('.+@.+\...+', email)
 
 def is_name_valid(name):

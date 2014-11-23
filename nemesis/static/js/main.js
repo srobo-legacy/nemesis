@@ -89,6 +89,14 @@ function college_name_from_hash() {
     return location.hash.substring(5,location.hash.length);
 }
 
+function isASCII(str) {
+    return /^[\x00-\x7F]*$/.test(str);
+}
+
+function isEmail(str) {
+    return /^.+@.+\...+$/.test(str);
+}
+
 setInterval(function() {
     cv.set_all_inactive();
     if (location.hash.substring(1,5) == "edit") {

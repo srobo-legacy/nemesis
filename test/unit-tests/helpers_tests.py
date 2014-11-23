@@ -164,7 +164,8 @@ class TestHelpers(unittest.TestCase):
 class TestValidityHelpers(unittest.TestCase):
     def test_is_email_valid(self):
         valids = ['pe@srobo.org', 'a@b.cc', 'sam@example.com']
-        invalids = ['@srobo.org', '@b.cc', 'a@b', 'a@.cc', 'a@b.', 'a@b.c', 'a@cc', 'bacon', 'bacon.cc']
+        invalids = ['@srobo.org', '@b.cc', 'a@b', 'a@.cc', 'a@b.', 'a@b.c', 'a@cc', \
+                    'bacon', 'bacon.cc', u"\u5317\u4EB0@nope.org"]
         for email in valids:
             is_valid = helpers.is_email_valid(email)
             assert is_valid, email

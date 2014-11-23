@@ -115,11 +115,19 @@ var RegisterView = function() {
                         return false;
                     }
                     // reject emails that aren't a@b.cc
-                    if (name == 'email' && !/.+@.+\...+/.test(val)) {
-                        var human_error = human_readable_error('BAD_EMAIL');
-                        feedback_node.html(human_error);
-                        invalid = true;
-                        return false;
+                    if (name == 'email') {
+                        var error_name = null;
+                        if (!isEmail(val)) {
+                            error_name = 'BAD_EMAIL';
+                        } else if (!isASCII(val)) {
+                            error_name = 'invalid_email_chars';
+                        }
+                        if (error_name) {
+                            var human_error = human_readable_error(error_name);
+                            feedback_node.html(human_error);
+                            invalid = true;
+                            return false;
+                        }
                     }
 
                     row_hash[name] = val;
@@ -152,6 +160,7 @@ var RegisterView = function() {
                     // javascript generated errors
                       'no_first_name': "First name is required",
                        'no_last_name': "Second name is required",
+                'invalid_email_chars': "Email address contains<br /> invalid characters",
                            'no_email': "Email address is required"
                          };
             if (errors.hasOwnProperty(error_code)) {
