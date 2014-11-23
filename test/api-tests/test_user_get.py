@@ -6,7 +6,7 @@ import sys
 import test_helpers
 
 sys.path.append("../../nemesis/libnemesis")
-from libnemesis import User, srusers
+from libnemesis import srusers
 from sqlitewrapper import PendingEmail
 
 def test_user_get_no_user():

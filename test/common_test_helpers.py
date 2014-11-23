@@ -9,7 +9,7 @@ def root():
 sys.path.insert(0,os.path.join(root(), "nemesis/libnemesis"))
 sys.path.insert(0,os.path.join(root(), 'nemesis'))
 
-from sqlitewrapper import PendingEmail, PendingSend, sqlite_connect
+from sqlitewrapper import PendingSend, sqlite_connect
 from mailer import load_template
 
 from libnemesis import srusers

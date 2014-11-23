@@ -214,7 +214,7 @@ def test_registration_email_in_use():
 
 @with_setup(remove_user('1_rt1'), remove_user('1_rt1'))
 @with_setup(test_helpers.delete_db, test_helpers.delete_db)
-def test_registration_email_in_use():
+def test_registration_bad_email():
     params = {"username":"teacher_coll1",
               "password":"facebees",
               "first_name":NEW_USER_FNAME,

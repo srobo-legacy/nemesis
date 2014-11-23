@@ -1,7 +1,5 @@
 
-import datetime
 import httplib
-import logging
 import base64
 import urllib
 import sys

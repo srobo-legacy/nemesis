@@ -1,10 +1,10 @@
 
 from datetime import datetime, timedelta
-from nose.tools import raises, with_setup
+from nose.tools import with_setup
 
 import test_helpers
 
-from sqlitewrapper import *
+from sqlitewrapper import PendingSend
 
 def test_simple_properties():
     ps = PendingSend('abc')

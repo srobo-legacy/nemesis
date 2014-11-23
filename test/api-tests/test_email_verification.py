@@ -3,8 +3,6 @@ import datetime
 from nose.tools import with_setup
 import json
 import sys
-import time
-import unittest
 
 import test_helpers
 
@@ -74,25 +72,6 @@ def test_email_change_request_reset():
 
     pe = PendingEmail(username)
     assert not pe.in_db, 'POST using original email should have cleared request'
-
-    test_helpers.assert_no_emails()
-
-@with_setup(test_helpers.delete_db, test_helpers.delete_db)
-def test_email_change_request_reset_without_change():
-    """ Test that a change requests to the original value,
-        where there is no actual outstanding request doens't explode"""
-    username = "student_coll1_1"
-    old_email = User(username).email
-
-    params = {"username":"teacher_coll1",
-              "password":"facebees",
-              "new_email":old_email,
-              }
-
-    r,data = test_helpers.server_post("/user/student_coll1_1", params)
-    assert r.status == 200, data
-    user = User(username)
-    assert user.email == old_email
 
     test_helpers.assert_no_emails()
 

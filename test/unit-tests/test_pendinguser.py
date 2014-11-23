@@ -1,11 +1,10 @@
 
 from datetime import timedelta
 from nose.tools import raises, with_setup
-import sys
 
 import test_helpers
 
-from sqlitewrapper import *
+from sqlitewrapper import PendingUser
 
 @with_setup(test_helpers.delete_db)
 def test_none_listed_at_start():
