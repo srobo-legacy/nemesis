@@ -34,19 +34,5 @@ var College = function() {
                 });
             });
         };
-
-        this.reload_users = function(callback) {
-            this.fetch(function(college) {
-                var k = college.users.length;
-                $.each(college.users, function(i, user) {
-                    user.fetch(function() {
-                        k -= 1;
-                        if (k == 0) {
-                            callback();
-                        }
-                    });
-                });
-            });
-        };
     };
 }();

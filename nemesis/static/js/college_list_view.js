@@ -78,7 +78,7 @@ var CollegeListView = function() {
             var count = colleges.length;
             var u = current_username;
             $(colleges).each(function(i, college) {
-                college.reload_users(function() {
+                college.fetch(function() {
                     count -= 1;
                     if (count == 0) {
                         that.render_colleges(colleges, allow_registration_last);
