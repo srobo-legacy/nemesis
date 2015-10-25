@@ -12,11 +12,16 @@ var User = function() {
         this.login = function(pw, success_callback, error_callback) {
             password = pw;
             set_header();
+            this.fetch(success_callback, error_callback);
+        };
+
+        this.fetch = function(success_callback, error_callback) {
             $.get("user/" + this.username, function(response) {
                 if (typeof(response) === "string") {
                     response = JSON.parse(response);
                 }
-                that.colleges = $.map(response["colleges"], function(v, i) { return new College(v);});
+
+                that.colleges = response.colleges;
                 that.teams = response.teams;
                 clone_simple_properties(response, that);
 
@@ -30,22 +35,8 @@ var User = function() {
             });
         };
 
-        this.fetch = function(callback) {
-            $.get("user/" + this.username, function(response) {
-                if (typeof(response) === "string") {
-                    response = JSON.parse(response);
-                }
-
-                that.colleges = response.colleges;
-                that.teams = response.teams;
-                clone_simple_properties(response, that);
-
-                callback(that);
-            });
-        };
-
         this.fetch_colleges = function(callback) {
-            var colleges = that.colleges;
+            var colleges = that.colleges = $.map(that.colleges, function(v) { return new College(v);});
             var waiting_colleges = colleges.length;
             for (var i = 0; i < colleges.length; i++) {
                 var college = colleges[i];
