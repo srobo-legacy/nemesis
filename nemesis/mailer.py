@@ -1,4 +1,5 @@
 
+import codecs
 from email.mime.text import MIMEText
 import logging
 import smtplib
@@ -34,7 +35,7 @@ def load_template(template_name, template_vars):
     script_dir = os.path.dirname(os.path.abspath(__file__))
     temp_path = os.path.join(script_dir, "templates", template_name + ".txt")
 
-    msg = open(temp_path, 'r').read()
+    msg = codecs.open(temp_path, 'r', encoding='utf-8').read()
 
     subject = msg.splitlines()[0]
     assert subject[:8] == "Subject:"
