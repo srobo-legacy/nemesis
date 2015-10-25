@@ -44,6 +44,20 @@ var User = function() {
             });
         };
 
+        this.fetch_colleges = function(callback) {
+            var colleges = that.colleges;
+            var waiting_colleges = colleges.length;
+            for (var i = 0; i < colleges.length; i++) {
+                var college = colleges[i];
+                college.fetch(function (college) {
+                    waiting_colleges--;
+                    if (waiting_colleges == 0) {
+                        callback(that);
+                    }
+                });
+            }
+        };
+
         var clone_simple_properties = function(from, to) {
             to.first_name   = from.first_name;
             to.last_name    = from.last_name;

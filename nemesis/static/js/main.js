@@ -24,16 +24,9 @@ $(document).ready(function() {
         wv.start("Logging in...");
         current_user = new User($("#username").val());
         current_user.login($("#password").val(), function(user) {
-            var waiting_colleges = user.colleges.length;
-            for (var i = 0; i < user.colleges.length; i++) {
-                var college = user.colleges[i];
-                college.fetch(function (college) {
-                    waiting_colleges--;
-                    if (waiting_colleges == 0) {
-                        cv.render_colleges(user.colleges, !user.is_student);
-                    }
-                });
-            }
+            user.fetch_colleges(function(user) {
+                cv.render_colleges(user.colleges, !user.is_student);
+            });
             $("#login").hide();
             $("#login-error").hide();
             sv.show(user.username);
