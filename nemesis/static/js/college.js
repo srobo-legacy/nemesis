@@ -23,14 +23,18 @@ var College = function() {
             });
         };
 
-        this.fetch = function(callback) {
+        this.fetch = function(callback, skip_users) {
             wv.start("Loading colleges");
             fetch_helper(function() {
-                wv.start("Fetching users");
-                that.load_users(function(college) {
-                    wv.hide();
-                    callback(college);
-                });
+                if (skip_users) {
+                    callback(that);
+                } else {
+                    wv.start("Fetching users");
+                    that.load_users(function(college) {
+                        wv.hide();
+                        callback(college);
+                    });
+                }
             });
         };
 

@@ -35,7 +35,7 @@ var User = function() {
             });
         };
 
-        this.fetch_colleges = function(callback) {
+        this.fetch_colleges = function(callback, skip_users) {
             var colleges = that.colleges = $.map(that.colleges, function(v) { return new College(v);});
             var waiting_colleges = colleges.length;
             for (var i = 0; i < colleges.length; i++) {
@@ -45,7 +45,7 @@ var User = function() {
                     if (waiting_colleges == 0) {
                         callback(that);
                     }
-                });
+                }, skip_users);
             }
         };
 
