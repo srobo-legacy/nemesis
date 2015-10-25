@@ -17,7 +17,7 @@ var College = function() {
 
                 that.english_name = response.name;
                 that.teams = response.teams;
-                user_requests = response.users.length;
+                var user_requests = response.users.length;
                 wv.start("Fetching users");
                 that.users = $.map(response.users, function(v) {
                     u = new User(v);
