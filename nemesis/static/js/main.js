@@ -15,14 +15,14 @@ $(document).ready(function() {
         location.hash = "";
     }
     var av = new AuthView($("#login-error"));
-    cv = new CollegeListView($("#data-college-list"))
+    cv = new CollegeListView($("#data-college-list"));
     ev = new EditView($("#data-edit-user"), cv.refresh);
     rv = new RegisterView($("#data-register-users"));
     sv = new SelfView($("#logged-in-user"));
     wv = new WorkingView($("#messages"));
     $("#login").submit(function() {
         wv.start("Logging in...");
-        current_user = new User($("#username").val())
+        current_user = new User($("#username").val());
         current_user.login($("#password").val(), function(user) {
             var waiting_colleges = user.colleges.length;
             for (var i = 0; i < user.colleges.length; i++) {
@@ -31,7 +31,7 @@ $(document).ready(function() {
                     waiting_colleges--;
                     if (waiting_colleges == 0) {
                         cv.render_colleges(user.colleges, !user.is_student);
-                    };
+                    }
                 });
             }
             $("#login").hide();

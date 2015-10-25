@@ -43,7 +43,7 @@ var EditView = function() {
                 var checked_fields = {
                         'type_student': user.is_student ? checked : '',
                     'type_team_leader': user.is_team_leader ? checked : ''
-                }
+                };
                 var withdrawn_text = "";
                 if (user.has_withdrawn) {
                     withdrawn_text = "This user has been withdrawn from the competition and cannot be edited.";
@@ -116,7 +116,7 @@ var EditView = function() {
             $.post("user/" + my_user.username, {'withdrawn': true}, function (response) {
                 that.refresh_view();
             });
-        }
+        };
 
         this.submit_form = function() {
             wv.start("Sending user details");

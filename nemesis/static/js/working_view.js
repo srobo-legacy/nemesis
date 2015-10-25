@@ -24,5 +24,5 @@ WorkingView = function() {
                 }
             };
         };
-    }
+    };
 }();

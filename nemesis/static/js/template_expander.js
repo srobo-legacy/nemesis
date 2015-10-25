@@ -77,7 +77,7 @@ var Template = function() {
 
         this.render = function() {
             return this.render_with({});
-        },
+        };
 
         this.map_over = function(key, values) {
             var build = [];
