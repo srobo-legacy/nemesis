@@ -1,8 +1,10 @@
 var current_user = null;
 var lastHash = "";
+var hashChangeEventListener = null;
 var ev = null;
 var cv = null;
 var rv = null;
+var sv = null;
 var wv = null;
 
 $(document).ready(function() {
