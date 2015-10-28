@@ -27,6 +27,9 @@ var User = function() {
 
                 success_callback(that);
             }).error(function(response) {
+                if (!error_callback) {
+                    return;
+                }
                 response = response.responseText;
                 if (typeof(response) === "string") {
                     response = JSON.parse(response);
