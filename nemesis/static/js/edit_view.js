@@ -90,10 +90,12 @@ var EditView = function() {
         };
 
         this.make_team_select = function(user) {
-            if (user.is_student) {
+            // Only students can have their team edited,
+            // only team leaders can actually edit teams.
+            if (user.is_student && my_requesting_user.is_team_leader) {
                 return TemplateExpander.make_select('new_team', my_requesting_user.teams, user.teams[0]);
-            } else { // team-leader, blueshirt
-                return TemplateExpander.make_checkboxes("new_team' disabled='disabled", my_requesting_user.teams, user.teams);
+            } else {
+                return TemplateExpander.make_list(user.teams);
             }
         };
 
