@@ -1,42 +1,54 @@
-var TemplateExpander = {
-    "escape" : function(text) {
-        return $('<div/>').text(text).html().replace(/'/g, '&#39;').replace(/"/g, '&quot;');
-    },
-    "template" : function(template_name) {
-        return new Template($("#" + template_name).html());
-    },
-    "make_select" : function(name, options, selected) {
-        build = "<select name='" + name + "'>";
+var TemplateExpander = function () {
+    var make_list = function(items, attrs) {
+        attrs = attrs || "";
+        var build = "<ul" + attrs + ">";
 
-        for (var i = 0 ; i < options.length; i++) {
-            var opt = options[i];
-            var selectAttr = selected == opt ? "' selected='selected" : '';
-            build += "<option value='" + opt + selectAttr + "'>" + opt + "</option>";
-        }
-
-        build += "</select>";
-        return build;
-    },
-    "make_checkboxes" : function(name, options, selected) {
-        build = "<ul>";
-
-        if (!(selected instanceof Array)) {
-            selected = [selected];
-        }
-
-        for (var i = 0 ; i < options.length; i++) {
-            build += "<li><label>";
-            var opt = options[i];
-            var selectAttr = $.inArray(opt, selected) >= 0 ? "' checked='checked" : '';
-            build += "<input type='checkbox' name='" + name + selectAttr + "' value='" + opt + "'>";
-            build += opt;
-            build += "</label></li>";
+        for (var i = 0 ; i < items.length; i++) {
+            build += "<li>" + items[i] + "</li>";
         }
 
         build += "</ul>";
         return build;
-    }
-};
+    };
+
+    return {
+        "escape" : function(text) {
+            return $('<div/>').text(text).html().replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+        },
+        "template" : function(template_name) {
+            return new Template($("#" + template_name).html());
+        },
+        "make_select" : function(name, options, selected) {
+            var build = "<select name='" + name + "'>";
+
+            for (var i = 0 ; i < options.length; i++) {
+                var opt = options[i];
+                var selectAttr = selected == opt ? "' selected='selected" : '';
+                build += "<option value='" + opt + selectAttr + "'>" + opt + "</option>";
+            }
+
+            build += "</select>";
+            return build;
+        },
+        "make_list" : make_list,
+        "make_checkboxes" : function(name, options, selected) {
+            if (!(selected instanceof Array)) {
+                selected = [selected];
+            }
+
+            var items = [];
+            for (var i = 0 ; i < options.length; i++) {
+                var opt = options[i];
+                var selectAttr = $.inArray(opt, selected) >= 0 ? "' checked='checked" : '';
+                var input = "<input type='checkbox' name='" + name + selectAttr + "' value='" + opt + "'>";
+                items.push("<label>" + input + opt + "</label>");
+            }
+
+            var build = make_list(items);
+            return build;
+        }
+    };
+}();
 
 var Template = function() {
     return function(template_text) {
