@@ -58,7 +58,11 @@ var EditView = function() {
                 jquerynode.html(text);
                 jquerynode.show();
                 if (user.email === undefined) {
-                    $("#data-email").hide();
+                    // Email is a required field so we need to
+                    // completely remove it if the user can't access it.
+                    // If we don't then the user will have issues submitting
+                    // the form (since the field is required but can't be filled.
+                    $("#data-email").remove();
                 } else {
                     $("#data-email").show();
                 }
