@@ -8,7 +8,8 @@ var AuthView = function() {
 
         var human_readable_error = function(auth_errors_list) {
             var reasons = {
-                "WRONG_PASSWORD": "Password incorrect"
+                "WRONG_PASSWORD": "Password incorrect",
+                "BACKEND_FAIL": "Server failure"
             };
 
             var result = "";

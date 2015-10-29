@@ -32,7 +32,14 @@ var User = function() {
                 }
                 response = response.responseText;
                 if (typeof(response) === "string") {
-                    response = JSON.parse(response);
+                    try {
+                        response = JSON.parse(response);
+                    } catch(err) {
+                        response = null;
+                        if (console && console.log) {
+                            console.log(err);
+                        }
+                    }
                 }
                 error_callback(response);
             });

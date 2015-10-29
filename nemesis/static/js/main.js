@@ -36,7 +36,8 @@ $(document).ready(function() {
             }
         },
         function(response) {
-            av.display_auth_error(response["authentication_errors"]);
+            var errors = response && response.authentication_errors || ['BACKEND_FAIL'];
+            av.display_auth_error(errors);
             wv.hide();
         });
         return false;
