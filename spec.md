@@ -1,6 +1,6 @@
 #Nemesis REST API spec
 
-##Version 3.5.1 [SemVer](http://semver.org/)
+##Version 3.6.0 [SemVer](http://semver.org/)
 
 This document explains all the Nemesis API endpoints. The production version of
 this API runs on http://studentrobotics.org/userman. URL components are of the
@@ -29,6 +29,7 @@ There are the following user roles in nemesis:
 * blueshirt
 * student
 * blueshirt-extra
+* blueshirt-media-consent
 
 The term "can administrate" in this document is used to determine whether or
 not a user is capable of administrating another user. The conditions for this
@@ -46,6 +47,9 @@ Users in the category of blueshirt-extra act like blueshirts, but have
 additional read access to some values. The details of this are deliberately
 not specified here as they may change as the requirements of the system's
 users change.
+
+Users in the category of blueshirt-media-consent act like blueshirts, but
+have the additional ability to set media consent related properties.
 
 ##GET /colleges
 
@@ -157,6 +161,9 @@ be cancelled by setting this to the users' current email.
 * `withdrawn` optional: If set to 'true', the user will be withdrawn. For this to have any
     effect, the requesting user must be a team leader, and the target user must not be
     themselves or a blueshirt.
+* `media_consent` optional: If set to 'true', the user will be marked as having given
+    media consent. For this to have any effect, the requesting user must be a blueshirt
+    with media-consent privileges.
 
 ####Response code
 
