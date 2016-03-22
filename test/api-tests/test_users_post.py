@@ -338,3 +338,52 @@ def test_post_teacher_cant_withdraw_self():
     assert r.status == 200
 
     assert not User("teacher_coll1").has_withdrawn
+
+@with_setup(None, unwithdraw('student_coll1_1'))
+def test_post_blueshirt_can_record_student_media_consent():
+    params = {"username":"blueshirt",
+              "password":"blueshirt",
+              "media_consent":'true',
+              }
+
+    r, data = test_helpers.server_post("/user/student_coll1_1", params)
+    assert r.status == 200
+
+    u = User("student_coll1_1")
+    assert u.has_media_consent
+
+    ps = test_helpers.last_email()
+    toaddr = ps.toaddr
+    expected_addr = u.email
+    assert toaddr == expected_addr
+
+    vars = ps.template_vars
+    first_name = u.first_name
+    assert first_name == vars['first_name']
+
+    template = ps.template_name
+    assert template == 'ticket_available'
+
+    test_helpers.assert_load_template(template, vars)
+
+def test_post_student_cant_record_student_media_consent():
+    params = {"username":"student_coll1_1",
+              "password":"cows",
+              "media_consent":'true',
+              }
+
+    r, data = test_helpers.server_post("/user/student_coll1_2", params)
+    assert r.status == 403
+
+    assert not User("student_coll1_2").has_media_consent
+
+def test_post_teacher_cant_record_student_media_consent():
+    params = {"username":"teacher_coll1",
+              "password":"facebees",
+              "media_consent":'true',
+              }
+
+    r, data = test_helpers.server_post("/user/student_coll1_2", params)
+    assert r.status == 200
+
+    assert not User("student_coll1_2").has_media_consent
