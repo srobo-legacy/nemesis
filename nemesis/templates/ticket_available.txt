@@ -1,0 +1,15 @@
+Subject:Student Robotics ticket available
+Hello {first_name},
+
+Your media consent release form has now been received and processed,
+thank you. Your ticket is now available at:
+
+    https://www.studentrobotics.org/tickets/
+
+Be sure to bring it with you to the competition!
+
+Thanks,
+The Student Robotics Team
+
+Please note: this is an automated email, and the account it was sent from
+is unable to reply.

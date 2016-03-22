@@ -136,6 +136,10 @@ def request_new_email(user, new_email):
     url = url_for('verify_email', username=userid, code=verify_code, _external=True)
     pe.send_verification_email(user.first_name, url)
 
+def notify_ticket_available(user):
+    email_vars = { 'first_name': user.first_name }
+    mailer.email_template(user.email, 'ticket_available', email_vars)
+
 @app.route("/user/<userid>", methods=["POST"])
 def set_user_details(userid):
     ah = AuthHelper(request)
@@ -168,6 +172,10 @@ def set_user_details(userid):
     if request.form.has_key("withdrawn") and request.form['withdrawn'] == 'true' \
         and ah.user.can_withdraw(user_to_update):
         user_to_update.withdraw()
+    if request.form.get("media_consent") == 'true' and ah.user.can_record_media_consent \
+        and not user_to_update.has_media_consent:
+        user_to_update.got_media_consent()
+        notify_ticket_available(user_to_update)
 
     user_to_update.save()
 
