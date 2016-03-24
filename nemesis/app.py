@@ -165,7 +165,7 @@ def set_user_details(userid):
             user_to_update.make_student()
         elif request.form["new_type"] == 'team-leader':
             user_to_update.make_teacher()
-    if request.form.has_key("withdrawn") and request.form['withdrawn'] == 'true' \
+    if request.form.get("withdrawn") == 'true' and not user_to_update.has_withdrawn \
         and ah.user.can_withdraw(user_to_update):
         user_to_update.withdraw()
 
