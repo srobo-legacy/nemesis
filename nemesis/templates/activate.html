@@ -13,11 +13,6 @@
         <script type="text/javascript" src="{root}static/js/college.js"></script>
         <script type="text/javascript" src="{root}static/js/template_expander.js"></script>
         <script type="text/javascript" src="{root}static/js/user.js"></script>
-        <script type="text/javascript">
-            var init_data = {{ 'username': "{username}"
-                             , 'password': "{password}"
-                             ,     'root': "{root}" }};
-        </script>
     </head>
     <body>
         <div class="navbar navbar-inverse navbar-fixed-top">
@@ -84,6 +79,11 @@
                     <a href="/forum" title="The forums are a great place to chat or get help">forums</a>
                     now?
                 </p>
+            </script>
+            <script type="text/json" id="init-data">
+                {{ "username": "{username}"
+                 , "password": "{password}"
+                 ,     "root": "{root}" }}
             </script>
         </div>
     </body>

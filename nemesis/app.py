@@ -23,6 +23,22 @@ app = Flask(__name__)
 
 ACTIVATION_DAYS = config.config.getint('nemesis', 'activation_days')
 
+PLAINTEXT_HEADER = {'Content-Type': 'text/plain'}
+
+# Note: we don't need to allow form submissions since all our forms
+#       are handled by JavaScript attached to the button rather than
+#       by traditional submission.
+# Note: it's not clear whether or not we need the img-src value:
+#       both Firefox 45 and Chrome 49 seem to render the CSS background-images
+#       just fine without it, though this seems contrary to the spec.
+CSP_VALUE = "connect-src 'self'; " \
+          + "img-src 'self'; " \
+          + "style-src 'self'; " \
+          + "script-src 'self' 'unsafe-eval' ajax.googleapis.com/ajax/libs/; "
+
+CSP_HEADER = {'Content-Security-Policy': CSP_VALUE,
+              'X-Content-Security-Policy': CSP_VALUE}
+
 @app.route("/")
 def index():
     # Work around Flask/Werkzeug bug (https://github.com/pallets/flask/issues/169,
@@ -33,7 +49,7 @@ def index():
 
     text = open(PATH + '/templates/index.html').read()
     text = text.replace('$ACTIVATION_DAYS$', str(ACTIVATION_DAYS))
-    return text
+    return text, 200, CSP_HEADER
 
 @app.route("/site/sha")
 def sha():
@@ -229,13 +245,13 @@ def activate_account(username, code):
     pu = PendingUser(username)
 
     if not pu.in_db:
-        return "No such user account", 404
+        return "No such user account", 404, PLAINTEXT_HEADER
 
     if pu.age > timedelta(days = ACTIVATION_DAYS):
-        return "Request not valid", 410
+        return "Request not valid", 410, PLAINTEXT_HEADER
 
     if pu.verify_code != code:
-        return "Invalid verification code", 403
+        return "Invalid verification code", 403, PLAINTEXT_HEADER
 
     log_action('activating user', pu)
 
@@ -281,7 +297,7 @@ def activate_account(username, code):
 
     html = html.format(**replacements)
 
-    return html, 200
+    return html, 200, CSP_HEADER
 
 @app.route("/verify/<username>/<code>", methods=["GET"])
 def verify_email(username, code):
@@ -294,16 +310,16 @@ def verify_email(username, code):
     change_request = PendingEmail(username)
 
     if not change_request.in_db:
-        return "No such change request", 404
+        return "No such change request", 404, PLAINTEXT_HEADER
 
     email_change_days = config.config.getint('nemesis', 'email_change_days')
     max_age = timedelta(days = email_change_days)
 
     if change_request.age > max_age:
-        return "Request not valid", 410
+        return "Request not valid", 410, PLAINTEXT_HEADER
 
     if change_request.verify_code != code:
-        return "Invalid verification code", 403
+        return "Invalid verification code", 403, PLAINTEXT_HEADER
 
     log_action('changing email', user = username, new_email = change_request.new_email)
 
@@ -311,7 +327,7 @@ def verify_email(username, code):
     u.set_email(change_request.new_email)
     u.save()
 
-    return "Email address successfully changed", 200
+    return "Email address successfully changed", 200, PLAINTEXT_HEADER
 
 if __name__ == "__main__":
     # Run the app in debug mode
