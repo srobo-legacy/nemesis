@@ -12,7 +12,7 @@ import mailer
 import helpers
 from helpers import log_action
 
-from flask import Flask, request, url_for
+from flask import Flask, request, redirect, url_for
 from datetime import timedelta
 
 from libnemesis import User, College, AuthHelper
@@ -25,6 +25,12 @@ ACTIVATION_DAYS = config.config.getint('nemesis', 'activation_days')
 
 @app.route("/")
 def index():
+    # Work around Flask/Werkzeug bug (https://github.com/pallets/flask/issues/169,
+    # https://github.com/pallets/werkzeug/issues/360); fixed in 0.9.8 though we
+    # don't have access to that version yet.
+    if request.environ['PATH_INFO'] != '/':
+       return redirect(url_for('.index'), code=302)
+
     text = open(PATH + '/templates/index.html').read()
     text = text.replace('$ACTIVATION_DAYS$', str(ACTIVATION_DAYS))
     return text
