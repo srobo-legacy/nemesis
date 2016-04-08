@@ -166,8 +166,25 @@ def notify_ticket_available(user):
 def set_user_details(userid):
     ah = AuthHelper(request)
 
-    if not (ah.auth_will_succeed and ah.user.can_administrate(userid)):
+    if not ah.auth_will_succeed:
         return ah.auth_error_json, 403
+
+    can_admin = ah.user.can_administrate(userid)
+
+    if request.form.get("media_consent") == 'true' and ah.user.can_record_media_consent:
+        user_to_update = User.create_user(userid)
+        if not user_to_update.has_media_consent:
+            user_to_update.got_media_consent()
+            notify_ticket_available(user_to_update)
+            user_to_update.save()
+
+        if not can_admin:
+            return '{}', 200
+
+    elif not can_admin:
+        return ah.auth_error_json, 403
+
+    assert can_admin
 
     user_to_update = User.create_user(userid)
     if request.form.has_key("new_email") and not ah.user.is_blueshirt:
@@ -194,10 +211,6 @@ def set_user_details(userid):
     if request.form.get("withdrawn") == 'true' and not user_to_update.has_withdrawn \
         and ah.user.can_withdraw(user_to_update):
         user_to_update.withdraw()
-    if request.form.get("media_consent") == 'true' and ah.user.can_record_media_consent \
-        and not user_to_update.has_media_consent:
-        user_to_update.got_media_consent()
-        notify_ticket_available(user_to_update)
 
     user_to_update.save()
 
