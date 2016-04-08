@@ -355,7 +355,7 @@ def test_post_blueshirt_can_record_student_media_consent():
               }
 
     r, data = test_helpers.server_post("/user/student_coll1_1", params)
-    assert r.status == 200
+    assert r.status == 200, (r.status, data)
 
     u = User("student_coll1_1")
     assert u.has_media_consent
@@ -391,7 +391,7 @@ def test_post_blueshirt_record_student_media_consent_again_no_email():
               }
 
     r, data = test_helpers.server_post("/user/student_coll1_1", params)
-    assert r.status == 200
+    assert r.status == 200, (r.status, data)
 
     u = User("student_coll1_1")
     assert u.has_media_consent
