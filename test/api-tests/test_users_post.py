@@ -375,11 +375,11 @@ def test_post_blueshirt_can_record_student_media_consent():
     test_helpers.assert_load_template(template, vars)
 
 def grant_mediaconsent(username):
-    def do_ungrant():
+    def do_grant():
         group = srusers.group('media-consent')
         group.user_add(username)
         group.save()
-    return do_ungrant
+    return do_grant
 
 @with_setup(grant_mediaconsent('student_coll1_1'),
             remove_mediaconsent('student_coll1_1'))
