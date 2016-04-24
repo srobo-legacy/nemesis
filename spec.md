@@ -1,6 +1,6 @@
 #Nemesis REST API spec
 
-##Version 3.6.0 [SemVer](http://semver.org/)
+##Version 3.7.0 [SemVer](http://semver.org/)
 
 This document explains all the Nemesis API endpoints. The production version of
 this API runs on http://studentrobotics.org/userman. URL components are of the
@@ -41,15 +41,15 @@ are as follows:
 * If the authenticated user is a blueshirt in the same college as the user to
   be accessed they may access/modify information about that user so long as
   that user is not a blueshirt.
+* If the authenticated user is a blueshirt with media-consent privileges they
+  may access information about that user. They may also media consent related
+  properties.
 * An authenticated user can administrate itself
 
 Users in the category of blueshirt-extra act like blueshirts, but have
 additional read access to some values. The details of this are deliberately
 not specified here as they may change as the requirements of the system's
 users change.
-
-Users in the category of blueshirt-media-consent act like blueshirts, but
-have the additional ability to set media consent related properties.
 
 ##GET /colleges
 

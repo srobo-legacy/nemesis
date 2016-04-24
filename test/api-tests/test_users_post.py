@@ -347,23 +347,15 @@ def remove_mediaconsent(username):
     return do_ungrant
 
 @with_setup(None, remove_mediaconsent('student_coll1_1'))
-@with_setup(test_helpers.remove_user('new-blue'), test_helpers.remove_user('new-blue'))
 @with_setup(test_helpers.delete_db, test_helpers.delete_db)
 def test_post_any_blueshirt_can_record_student_media_consent():
-    # Create a new blueshirt account which isn't in any college groups
-    new_blue = srusers.user('new-blue')
-    new_blue.cname = 'new'
-    new_blue.sname = 'blue'
-    new_blue.email = 'nb@example.com'
-    new_blue.save()
-    new_blue.set_passwd(new = 'new-blue')
+    blueshirt_mcf = srusers.user('blueshirt-mcf')
+    groups = blueshirt_mcf.groups()
+    # Sanity check
+    assert set(groups) == set(['mentors', 'media-consent-admin'])
 
-    mca = srusers.group('media-consent-admin')
-    mca.user_add(new_blue)
-    mca.save()
-
-    params = {"username":"new-blue",
-              "password":"new-blue",
+    params = {"username":"blueshirt-mcf",
+              "password":"blueshirt",
               "media_consent":'true',
               }
 
