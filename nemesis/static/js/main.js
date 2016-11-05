@@ -9,7 +9,7 @@ var wv = null;
 
 $(document).ready(function() {
     $.ajaxSetup({
-            cache: false
+        'cache': false
     });
     if (location.hash.length >= 1) {
         location.hash = "";

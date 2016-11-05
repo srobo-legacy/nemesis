@@ -53,12 +53,14 @@ var EditView = function() {
                 if (user.has_withdrawn) {
                     withdrawn_text = "This user has been withdrawn from the competition and cannot be edited.";
                 }
-                var opts = {"user":user,
-                        "disabled":disabled_fields,
-                         "checked":checked_fields,
-                   "email_comment":email_comment,
-                     "team_select":that.make_team_select(user),
-                  "withdrawn_text":withdrawn_text};
+                var opts = {
+                            "user": user,
+                        "disabled": disabled_fields,
+                         "checked": checked_fields,
+                   "email_comment": email_comment,
+                     "team_select": that.make_team_select(user),
+                  "withdrawn_text": withdrawn_text
+                };
                 var text = template.render_with(opts);
                 jquerynode.html(text);
                 jquerynode.show();

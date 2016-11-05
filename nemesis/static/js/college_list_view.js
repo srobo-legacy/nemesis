@@ -22,8 +22,10 @@ var CollegeListView = function() {
             for (var i = 0; i < college_list.length; i++) {
                 var college = college_list[i];
                 $(college.users).each(function(idx, u) {
-                    var args = { 'first': u.first_name,
-                                  'last': u.last_name };
+                    var args = {
+                        'first': u.first_name,
+                        'last': u.last_name
+                    };
                     if (u.has_media_consent) {
                         args.not = '';
                         args.icon = 'camera';
@@ -41,9 +43,11 @@ var CollegeListView = function() {
                 if (allow_registration && register_template != null) { // will be null if not allowed to register
                     register_link = register_template.render_with({"college":college});
                 }
-                var final_render = college_template.render_with({"users":user_templates,
-                    "register":register_link,
-                    "college":college});
+                var final_render = college_template.render_with({
+                    "users": user_templates,
+                    "register": register_link,
+                    "college": college
+                });
 
                 result += final_render;
             }

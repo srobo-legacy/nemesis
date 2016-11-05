@@ -139,9 +139,11 @@ var RegisterView = function() {
                 $(row).find(":input").each(function (i, e) {
                     e.disabled = true;
                 });
-                var row_info = { 'tr': row,
-                      'feedback_node': feedback_node,
-                             'fields': row_hash };
+                var row_info = {
+                    'tr': row,
+                    'feedback_node': feedback_node,
+                    'fields': row_hash
+                };
 
                 inputs.push(row_info);
             }
