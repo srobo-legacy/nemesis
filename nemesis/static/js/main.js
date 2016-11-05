@@ -2,7 +2,7 @@ var current_user = null;
 var lastHash = "";
 var hashChangeEventListener = null;
 var ev = null;
-var cv = null;
+var clv = null;
 var rv = null;
 var sv = null;
 var wv = null;
@@ -15,8 +15,8 @@ $(document).ready(function() {
         location.hash = "";
     }
     var av = new AuthView($("#login-error"));
-    cv = new CollegeListView($("#data-college-list"));
-    ev = new EditView($("#data-edit-user"), cv.refresh_all);
+    clv = new CollegeListView($("#data-college-list"));
+    ev = new EditView($("#data-edit-user"), clv.refresh_all);
     rv = new RegisterView($("#data-register-users"));
     sv = new SelfView($("#logged-in-user"));
     wv = new WorkingView($("#messages"));
@@ -25,7 +25,7 @@ $(document).ready(function() {
         current_user = new User($("#username").val());
         current_user.login($("#password").val(), function(user) {
             user.fetch_colleges(function(user) {
-                cv.render_colleges(user.colleges, !user.is_student);
+                clv.render_colleges(user.colleges, !user.is_student);
             });
             $("#login").hide();
             $("#login-error").hide();
@@ -64,16 +64,16 @@ function hashChangeEventHandler() {
 function handle_hash() {
     ev.hide();
     rv.hide();
-    cv.set_all_inactive();
+    clv.set_all_inactive();
     if (location.hash.substring(1,5) == "edit") {
         var username = location.hash.substring(6,location.hash.length);
         rv.hide();
         wv.start("Loading user");
         ev.show(username, current_user);
-        cv.set_active(username);
+        clv.set_active(username);
     } else if (location.hash.substring(1,4) == "reg") {
         rv.show(college_name_from_hash());
-        cv.set_register_active(college_name_from_hash());
+        clv.set_register_active(college_name_from_hash());
     }
 }
 
@@ -94,11 +94,11 @@ function isEmail(str) {
 }
 
 setInterval(function() {
-    cv.set_all_inactive();
+    clv.set_all_inactive();
     if (location.hash.substring(1,5) == "edit") {
         var username = location.hash.substring(6,location.hash.length);
-        cv.set_active(username);
+        clv.set_active(username);
     } else if (location.hash.substring(1,4) == "reg") {
-        cv.set_register_active(college_name_from_hash());
+        clv.set_register_active(college_name_from_hash());
     }
 }, 100);
