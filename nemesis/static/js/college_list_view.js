@@ -6,19 +6,16 @@ var CollegeListView = function() {
         var current_username;
         var allow_registration_last;
 
+        var college_template = TemplateExpander.template("college");
+        var user_template = TemplateExpander.template("user_link");
+        var media_consent_template = TemplateExpander.template('media_consent');
+        var register_template = TemplateExpander.template("register_link");
+
         this.render_colleges = function(college_list, allow_registration) {
             colleges = college_list;
             allow_registration_last = allow_registration;
 
-            var college_template = TemplateExpander.template("college");
-            var user_template    = TemplateExpander.template("user_link");
-            var register_template = null;
-            if (allow_registration) {
-                register_template = TemplateExpander.template("register_link");
-            }
-
             var result = "";
-            var media_consent_template = TemplateExpander.template('media_consent');
             for (var i = 0; i < college_list.length; i++) {
                 var college = college_list[i];
                 $(college.users).each(function(idx, u) {
@@ -40,7 +37,7 @@ var CollegeListView = function() {
                 });
                 var user_templates = user_template.map_over("user", college.users);
                 var register_link = '';
-                if (allow_registration && register_template != null) { // will be null if not allowed to register
+                if (allow_registration) {
                     register_link = register_template.render_with({"college":college});
                 }
                 var final_render = college_template.render_with({
