@@ -11,6 +11,11 @@ var EditView = function() {
             this.refresh_view();
         };
 
+        this.refresh_all = function() {
+            this.refresh_view();
+            refresh_callback();
+        };
+
         this.refresh_view = function() {
             my_user.fetch(function(user) {
                 var template = TemplateExpander.template("user_edit");
@@ -84,8 +89,6 @@ var EditView = function() {
                     that.submit_form();
                     event.preventDefault();
                 });
-
-                refresh_callback();
             });
         };
 
@@ -106,7 +109,7 @@ var EditView = function() {
         this.cancel_email_change = function() {
             wv.start("Cancelling outstanding email change");
             $.post("user/" + my_user.username, {'new_email': my_user.email}, function(response) {
-                that.refresh_view();
+                that.refresh_all();
             });
         };
 
@@ -120,7 +123,7 @@ var EditView = function() {
             }
             wv.start("Withdrawing user");
             $.post("user/" + my_user.username, {'withdrawn': true}, function (response) {
-                that.refresh_view();
+                that.refresh_all();
             });
         };
 
@@ -138,7 +141,7 @@ var EditView = function() {
                 if (cb_extra != null) {
                     cb_extra();
                 }
-                that.refresh_view();
+                that.refresh_all();
             });
         };
 
