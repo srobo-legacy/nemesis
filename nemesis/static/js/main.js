@@ -67,7 +67,6 @@ function handle_hash() {
     clv.set_all_inactive();
     if (location.hash.substring(1,5) == "edit") {
         var username = location.hash.substring(6,location.hash.length);
-        rv.hide();
         wv.start("Loading user");
         ev.show(username, current_user);
         clv.set_active(username);
