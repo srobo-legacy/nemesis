@@ -66,9 +66,11 @@
                     </ul>
                 </div>
             </script>
+
             <script type="text/template" id="welcome_link">
                 <a href="#edit-{username}"><i class="icon-user icon-white"></i> {first_name} {last_name} ({username})</a>
             </script>
+
             <script type="text/template" id="user_link">
                 <li class="user {user.username} {user.class}"><a href="#edit-{user.username}">{html:user.media} <i class="icon-user"></i> {user.first_name} {user.last_name} ({user.username})</a></li>
             </script>
@@ -112,6 +114,7 @@
                 </fieldset>
                 </form>
             </script>
+
             <script type="text/template" id="register">
                 <h2>Register users to <span class="capitalize">{college.english_name}</span></h2>
                 <p>Users will be emailed an activation link, which will be valid for $ACTIVATION_DAYS$ days.</p>
