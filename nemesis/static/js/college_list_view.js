@@ -52,6 +52,7 @@ var CollegeListView = function() {
 
             $('#data-college-list button.refresh').click(that.refresh);
         };
+
         this.set_active = function(username) {
             this.set_all_inactive();
             var u = $("." + username);
