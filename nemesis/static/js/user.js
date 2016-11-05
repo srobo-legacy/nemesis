@@ -4,9 +4,16 @@ var User = function() {
         this.first_name = "";
         this.last_name = "";
         this.email = "";
-        var password = "";
-        this.colleges = [];
+        this.new_email = false;
+        this.is_blueshirt = false;
+        this.is_student = false;
+        this.is_team_leader = false;
+        this.has_media_consent = false;
         this.has_withdrawn = false;
+        this.colleges = [];
+        this.teams = [];
+
+        var password = "";
         var that = this;
 
         this.login = function(pw, success_callback, error_callback) {
