@@ -54,7 +54,7 @@ var CollegeListView = function() {
 
             node.html(result);
 
-            $('#data-college-list button.refresh').click(that.refresh);
+            $('#data-college-list button.refresh').click(that.refresh_all);
         };
 
         this.set_active = function(username) {
@@ -79,7 +79,7 @@ var CollegeListView = function() {
             current_username = null;
         };
 
-        this.refresh = function() {
+        this.refresh_all = function() {
             var count = colleges.length;
             var u = current_username;
             $(colleges).each(function(i, college) {

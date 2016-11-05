@@ -16,7 +16,7 @@ $(document).ready(function() {
     }
     var av = new AuthView($("#login-error"));
     cv = new CollegeListView($("#data-college-list"));
-    ev = new EditView($("#data-edit-user"), cv.refresh);
+    ev = new EditView($("#data-edit-user"), cv.refresh_all);
     rv = new RegisterView($("#data-register-users"));
     sv = new SelfView($("#logged-in-user"));
     wv = new WorkingView($("#messages"));
