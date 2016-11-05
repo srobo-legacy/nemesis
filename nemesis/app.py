@@ -227,7 +227,7 @@ def colleges():
     if ah.auth_will_succeed and ah.user.is_blueshirt:
         return json.dumps({"colleges":College.all_college_names()})
     else:
-        return ah.auth_error_json,403
+        return ah.auth_error_json, 403
 
 @app.route("/colleges/<collegeid>", methods=["GET"])
 def college_info(collegeid):
