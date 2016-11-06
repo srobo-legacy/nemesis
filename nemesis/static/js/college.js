@@ -16,6 +16,12 @@ var College = function() {
 
                 that.english_name = response.name;
                 that.teams = response.teams;
+
+                that.num_team_leaders  = response.counts.team_leaders;
+                that.num_students      = response.counts.students;
+                that.num_media_consent = response.counts.media_consent;
+                that.num_withdrawn     = response.counts.withdrawn;
+
                 var user_requests = response.users.length;
                 that.users = $.map(response.users, function(v) { return new User(v); });
                 Colleges[that.canonical_name] = that;

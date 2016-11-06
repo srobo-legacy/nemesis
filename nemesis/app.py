@@ -241,6 +241,13 @@ def college_info(collegeid):
         if c in au.colleges:
             response["users"] = [m.username for m in c.users if au.can_administrate(m)]
 
+        response['counts'] = {
+            'team_leaders': len([u for u in c.users if u.is_teacher]),
+            'students': len([u for u in c.users if u.is_student]),
+            'media_consent': len([u for u in c.users if u.has_media_consent and not u.is_blueshirt]),
+            'withdrawn': len([u for u in c.users if u.has_withdrawn]),
+        }
+
         return json.dumps(response), 200
 
     else:

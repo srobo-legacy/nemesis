@@ -1,6 +1,6 @@
 #Nemesis REST API spec
 
-##Version 3.7.0 [SemVer](http://semver.org/)
+##Version 3.8.0 [SemVer](http://semver.org/)
 
 This document explains all the Nemesis API endpoints. The production version of
 this API runs on http://studentrobotics.org/userman. URL components are of the
@@ -93,6 +93,12 @@ If the response code is 200 the object contains:
            happened and the user is a member of this college.
 * `teams`: a list of all the teams in that college. Example `['team-ABC']`.
 * `college_name`: the name of the college.
+* `counts`: a mapping of useful counts:
+    * `team_leaders`: the number of `team-leader`s in the college.
+    * `students`: the number of `student`s in the college.
+    * `media_consent`: the number of users in the college who have given media consent.
+    * `withdrawn`: the number of withdrawn users in the college.
+
 
 ##GET /user/:username
 
