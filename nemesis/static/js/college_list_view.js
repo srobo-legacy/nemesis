@@ -82,14 +82,13 @@ var CollegeListView = function() {
 
         this.refresh_all = function() {
             var count = colleges.length;
-            var u = current_username;
             $(colleges).each(function(i, college) {
                 college.fetch(function() {
                     count -= 1;
                     if (count == 0) {
                         that.render_colleges(colleges, allow_registration_last);
-                        if (u) {
-                            that.set_active(u);
+                        if (current_username) {
+                            that.set_active(current_username);
                         }
                     }
                 });
