@@ -91,13 +91,3 @@ function isASCII(str) {
 function isEmail(str) {
     return /^.+@.+\...+$/.test(str);
 }
-
-setInterval(function() {
-    clv.set_all_inactive();
-    if (location.hash.substring(1,5) == "edit") {
-        var username = location.hash.substring(6,location.hash.length);
-        clv.set_active(username);
-    } else if (location.hash.substring(1,4) == "reg") {
-        clv.set_register_active(college_name_from_hash());
-    }
-}, 100);
