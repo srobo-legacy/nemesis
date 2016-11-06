@@ -1,3 +1,4 @@
+import functools
 import os
 import sys
 
@@ -39,6 +40,19 @@ CSP_VALUE = "connect-src 'self'; " \
 CSP_HEADER = {'Content-Security-Policy': CSP_VALUE,
               'X-Content-Security-Policy': CSP_VALUE}
 
+AUTHORIZATION_DENIED = (json.dumps({'authentication_errors':[]}), 403)
+
+
+def auth_required(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        ah = AuthHelper(request)
+        if not ah.auth_will_succeed:
+            return ah.auth_error_json, 403
+
+        return func(ah.user, *args, **kwargs)
+    return wrapper
+
 
 @app.route("/")
 def index():
@@ -59,13 +73,8 @@ def sha():
 
 
 @app.route("/registrations", methods=["POST"])
-def register_user():
-    ah = AuthHelper(request)
-
-    if not ah.auth_will_succeed:
-        return ah.auth_error_json, 403
-
-    requesting_user = ah.user
+@auth_required
+def register_user(requesting_user):
     if not requesting_user.can_register_users:
         return json.dumps({"error":"YOU_CANT_REGISTER_USERS"}), 403
 
@@ -125,14 +134,13 @@ def register_user():
 
 
 @app.route("/user/<userid>", methods=["GET"])
-def user_details(userid):
-    ah = AuthHelper(request)
-
-    if not (ah.auth_will_succeed and ah.user.can_view(userid)):
-        return ah.auth_error_json, 403
+@auth_required
+def user_details(requesting_user, userid):
+    if not requesting_user.can_view(userid):
+        return AUTHORIZATION_DENIED
 
     user = User.create_user(userid)
-    details = user.details_dictionary_for(ah.user)
+    details = user.details_dictionary_for(requesting_user)
 
     if 'email' in details:
         # The requesting user can view the emails -- also tell them
@@ -170,15 +178,11 @@ def notify_ticket_available(user):
 
 
 @app.route("/user/<userid>", methods=["POST"])
-def set_user_details(userid):
-    ah = AuthHelper(request)
+@auth_required
+def set_user_details(requesting_user, userid):
+    can_admin = requesting_user.can_administrate(userid)
 
-    if not ah.auth_will_succeed:
-        return ah.auth_error_json, 403
-
-    can_admin = ah.user.can_administrate(userid)
-
-    if request.form.get("media_consent") == 'true' and ah.user.can_record_media_consent:
+    if request.form.get("media_consent") == 'true' and requesting_user.can_record_media_consent:
         user_to_update = User.create_user(userid)
         if not user_to_update.has_media_consent:
             user_to_update.got_media_consent()
@@ -189,17 +193,17 @@ def set_user_details(userid):
             return '{}', 200
 
     elif not can_admin:
-        return ah.auth_error_json, 403
+        return AUTHORIZATION_DENIED
 
     assert can_admin
 
     user_to_update = User.create_user(userid)
-    if request.form.has_key("new_email") and not ah.user.is_blueshirt:
+    if request.form.has_key("new_email") and not requesting_user.is_blueshirt:
         new_email = request.form["new_email"]
         request_new_email(user_to_update, new_email)
     # Students aren't allowed to update their own names
-    # at this point, if the ah.user is valid, we know it's a self-edit
-    if not ah.user.is_student:
+    # at this point, if the requesting_user is valid, we know it's a self-edit
+    if not requesting_user.is_student:
         fname = request.form.get("new_first_name")
         if fname:
             user_to_update.set_first_name(fname)
@@ -208,15 +212,15 @@ def set_user_details(userid):
             user_to_update.set_last_name(lname)
     if request.form.has_key("new_team"):
         team = request.form["new_team"]
-        if (not user_to_update.is_blueshirt) and ah.user.manages_team(team):
+        if (not user_to_update.is_blueshirt) and requesting_user.manages_team(team):
             user_to_update.set_team(team)
-    if request.form.has_key("new_type") and ah.user.is_teacher and user_to_update != ah.user:
+    if request.form.has_key("new_type") and requesting_user.is_teacher and user_to_update != requesting_user:
         if request.form["new_type"] == 'student':
             user_to_update.make_student()
         elif request.form["new_type"] == 'team-leader':
             user_to_update.make_teacher()
     if request.form.get("withdrawn") == 'true' and not user_to_update.has_withdrawn \
-        and ah.user.can_withdraw(user_to_update):
+        and requesting_user.can_withdraw(user_to_update):
         user_to_update.withdraw()
 
     user_to_update.save()
@@ -230,23 +234,23 @@ def set_user_details(userid):
 
 
 @app.route("/colleges", methods=["GET"])
-def colleges():
-    ah = AuthHelper(request)
-    if ah.auth_will_succeed and ah.user.is_blueshirt:
+@auth_required
+def colleges(requesting_user):
+    if requesting_user.is_blueshirt:
         return json.dumps({"colleges":College.all_college_names()})
     else:
-        return ah.auth_error_json, 403
+        return AUTHORIZATION_DENIED
 
 
 @app.route("/colleges/<collegeid>", methods=["GET"])
-def college_info(collegeid):
-    ah = AuthHelper(request)
+@auth_required
+def college_info(requesting_user, collegeid):
     c = College(collegeid)
-    if ah.auth_will_succeed and c in ah.user.colleges or ah.user.is_blueshirt:
+    if c in requesting_user.colleges or requesting_user.is_blueshirt:
         response = {}
         response["name"] = c.name
         response["teams"] = [t.name for t in c.teams]
-        au = ah.user
+        au = requesting_user
         if c in au.colleges:
             response["users"] = [m.username for m in c.users if au.can_administrate(m)]
 
@@ -260,7 +264,7 @@ def college_info(collegeid):
         return json.dumps(response), 200
 
     else:
-        return ah.auth_error_json, 403
+        return AUTHORIZATION_DENIED
 
 
 @app.route("/activate/<username>/<code>", methods=["GET"])
