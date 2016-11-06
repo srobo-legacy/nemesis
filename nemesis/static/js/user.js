@@ -12,6 +12,7 @@ var User = function() {
         this.has_withdrawn = false;
         this.colleges = [];
         this.teams = [];
+        this.is_logged_in = false;
 
         var password = "";
         var that = this;
@@ -19,7 +20,10 @@ var User = function() {
         this.login = function(pw, success_callback, error_callback) {
             password = pw;
             set_header();
-            this.fetch(success_callback, error_callback);
+            this.fetch(function(u) {
+                that.is_logged_in = true;
+                success_callback(u);
+            }, error_callback);
         };
 
         this.fetch = function(success_callback, error_callback) {

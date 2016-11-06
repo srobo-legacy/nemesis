@@ -65,6 +65,11 @@ function handle_hash() {
     ev.hide();
     rv.hide();
     clv.set_all_inactive();
+
+    if (!current_user || !current_user.is_logged_in) {
+        return;
+    }
+
     if (location.hash.substring(1,5) == "edit") {
         var username = location.hash.substring(6,location.hash.length);
         wv.start("Loading user");
