@@ -250,9 +250,9 @@ def college_info(requesting_user, collegeid):
         response = {}
         response["name"] = c.name
         response["teams"] = [t.name for t in c.teams]
-        au = requesting_user
-        if c in au.colleges:
-            response["users"] = [m.username for m in c.users if au.can_administrate(m)]
+
+        if c in requesting_user.colleges:
+            response["users"] = [m.username for m in c.users if requesting_user.can_administrate(m)]
 
         response['counts'] = {
             'team_leaders': len([u for u in c.users if u.is_teacher]),
