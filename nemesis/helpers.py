@@ -16,7 +16,7 @@ PATH = os.path.dirname(os.path.abspath(__file__))
 
 sys.path.insert(0, PATH + '/libnemesis/')
 
-from libnemesis import srusers, User
+from libnemesis import User
 
 def log_action(action, *args, **kwargs):
     keyed = [k + ": " + str(v) for k, v in kwargs.iteritems()]
