@@ -32,7 +32,7 @@ var User = function() {
                     response = JSON.parse(response);
                 }
 
-                that.colleges = response.colleges;
+                that.colleges = $.map(response.colleges, function(v) { return new College(v);});
                 that.teams = response.teams;
                 clone_simple_properties(response, that);
 
@@ -57,7 +57,7 @@ var User = function() {
         };
 
         this.fetch_colleges = function(callback, skip_users) {
-            var colleges = that.colleges = $.map(that.colleges, function(v) { return new College(v);});
+            var colleges = that.colleges;
             var waiting_colleges = colleges.length;
             for (var i = 0; i < colleges.length; i++) {
                 var college = colleges[i];
