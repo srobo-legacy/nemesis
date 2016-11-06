@@ -31,7 +31,7 @@ $(document).ready(function() {
             sv.show(user.username);
             wv.end("Login succeeded");
             if (user.colleges.length <= 1) {
-                window.location = '#college-list';
+                window.location = '#my-colleges';
             } else {
                 // users with a large number of teams just get a summary table
                 window.location = '#colleges-overview';
@@ -82,7 +82,7 @@ function handle_hash() {
     } else if (location.hash.substring(1,4) == "reg") {
         rv.show(college_name_from_hash());
         clv.set_register_active(college_name_from_hash());
-    } else if (location.hash.substring(1) == "college-list") {
+    } else if (location.hash.substring(1) == "my-colleges") {
         if (current_user.colleges.length > 0) {
             wv.start("Loading college information");
             current_user.fetch_colleges(function(user) {
