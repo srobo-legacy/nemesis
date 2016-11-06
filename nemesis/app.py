@@ -39,6 +39,7 @@ CSP_VALUE = "connect-src 'self'; " \
 CSP_HEADER = {'Content-Security-Policy': CSP_VALUE,
               'X-Content-Security-Policy': CSP_VALUE}
 
+
 @app.route("/")
 def index():
     # Work around Flask/Werkzeug bug (https://github.com/pallets/flask/issues/169,
@@ -51,9 +52,11 @@ def index():
     text = text.replace('$ACTIVATION_DAYS$', str(ACTIVATION_DAYS))
     return text, 200, CSP_HEADER
 
+
 @app.route("/site/sha")
 def sha():
     return subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=PATH)
+
 
 @app.route("/registrations", methods=["POST"])
 def register_user():
@@ -120,6 +123,7 @@ def register_user():
 
     return "{}", 202
 
+
 @app.route("/user/<userid>", methods=["GET"])
 def user_details(userid):
     ah = AuthHelper(request)
@@ -140,6 +144,7 @@ def user_details(userid):
                 details['new_email'] = new_email
     return json.dumps(details), 200
 
+
 def request_new_email(user, new_email):
     userid = user.username
 
@@ -158,9 +163,11 @@ def request_new_email(user, new_email):
     url = url_for('verify_email', username=userid, code=verify_code, _external=True)
     pe.send_verification_email(user.first_name, url)
 
+
 def notify_ticket_available(user):
     email_vars = { 'first_name': user.first_name }
     mailer.email_template(user.email, 'ticket_available', email_vars)
+
 
 @app.route("/user/<userid>", methods=["POST"])
 def set_user_details(userid):
@@ -221,6 +228,7 @@ def set_user_details(userid):
 
     return '{}', 200
 
+
 @app.route("/colleges", methods=["GET"])
 def colleges():
     ah = AuthHelper(request)
@@ -228,6 +236,7 @@ def colleges():
         return json.dumps({"colleges":College.all_college_names()})
     else:
         return ah.auth_error_json, 403
+
 
 @app.route("/colleges/<collegeid>", methods=["GET"])
 def college_info(collegeid):
@@ -252,6 +261,7 @@ def college_info(collegeid):
 
     else:
         return ah.auth_error_json, 403
+
 
 @app.route("/activate/<username>/<code>", methods=["GET"])
 def activate_account(username, code):
@@ -319,6 +329,7 @@ def activate_account(username, code):
 
     return html, 200, CSP_HEADER
 
+
 @app.route("/verify/<username>/<code>", methods=["GET"])
 def verify_email(username, code):
     """
@@ -348,6 +359,7 @@ def verify_email(username, code):
     u.save()
 
     return "Email address successfully changed", 200, PLAINTEXT_HEADER
+
 
 if __name__ == "__main__":
     # Run the app in debug mode
