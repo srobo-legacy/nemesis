@@ -247,20 +247,7 @@ def colleges(requesting_user):
 def college_info(requesting_user, collegeid):
     c = College(collegeid)
     if c in requesting_user.colleges or requesting_user.is_blueshirt:
-        response = {}
-        response["name"] = c.name
-        response["teams"] = [t.name for t in c.teams]
-
-        if c in requesting_user.colleges:
-            response["users"] = [m.username for m in c.users if requesting_user.can_administrate(m)]
-
-        response['counts'] = {
-            'team_leaders': len([u for u in c.users if u.is_teacher]),
-            'students': len([u for u in c.users if u.is_student]),
-            'media_consent': len([u for u in c.users if u.has_media_consent and not u.is_blueshirt]),
-            'withdrawn': len([u for u in c.users if u.has_withdrawn]),
-        }
-
+        response = c.details_dictionary_for(requesting_user)
         return json.dumps(response), 200
 
     else:
