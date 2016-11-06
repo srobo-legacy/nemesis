@@ -43,6 +43,10 @@ var CollegeListView = function() {
             return final_render;
         };
 
+        this.hide = function() {
+            node.hide();
+        };
+
         this.render_colleges = function(college_list, allow_registration) {
             colleges = college_list;
             allow_registration_last = allow_registration;
@@ -56,6 +60,8 @@ var CollegeListView = function() {
             node.html(result);
 
             $('#data-college-list button.refresh').click(that.refresh_all);
+
+            node.show();
         };
 
         this.set_active = function(username) {

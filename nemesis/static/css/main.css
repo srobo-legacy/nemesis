@@ -46,3 +46,11 @@ p.withdrawn-warning:empty {
     background-color:#0088CC;
     color:#999999;
 }
+
+.navbar ul.overview-links {
+    display:none;
+}
+
+span.percent {
+    margin-left:1em;
+}

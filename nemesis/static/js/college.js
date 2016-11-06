@@ -30,7 +30,6 @@ var College = function() {
         };
 
         this.fetch = function(callback, skip_users) {
-            wv.start("Loading colleges");
             fetch_helper(function() {
                 if (skip_users) {
                     callback(that);

@@ -14,6 +14,7 @@
         <script type="text/javascript" src="static/js/edit_view.js"></script>
         <script type="text/javascript" src="static/js/register_view.js"></script>
         <script type="text/javascript" src="static/js/college_list_view.js"></script>
+        <script type="text/javascript" src="static/js/college_table_view.js"></script>
         <script type="text/javascript" src="static/js/self_view.js"></script>
         <script type="text/javascript" src="static/js/working_view.js"></script>
         <script type="text/javascript" src="static/js/template_expander.js"></script>
@@ -29,6 +30,14 @@
                         <span class="icon-bar"></span>
                     </a>
                     <a class="brand" href="#">Userman</a>
+                    <ul class="nav overview-links">
+                        <li>
+                            <a href="#college-list">Colleges List</a>
+                        </li>
+                        <li>
+                            <a href="#colleges-overview">Colleges Overview</a>
+                        </li>
+                    </ul>
                     <form id="login" class="navbar-form pull-right">
                         <input id="username" class="span2" type="text" placeholder="Username">
                         <input id="password" class="span2" type="password" placeholder="Password">
@@ -51,8 +60,34 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="span12" id="data-college-table">
+                </div>
+            </div>
         </div>
         <div class="templates">
+            <script type="text/template" id="college_table">
+                <table class="table table-striped">
+                    <tr>
+                        <th>Name</th>
+                        <th>Team Leaders</th>
+                        <th>Competitors</th>
+                        <th>Media Consent</th>
+                    </tr>
+                    {html:college_rows}
+                </table>
+            </script>
+            <script type="text/template" id="college_table_row">
+                <tr>
+                    <td class="capitalize">
+                        {college.english_name}
+                    </td>
+                    <td>{college.num_team_leaders}</td>
+                    <td>{college.num_students}</td>
+                    <td>{college.num_media_consent} <span class="percent">({media_consent_percent}%)</span></td>
+                </tr>
+            </script>
+
             <script type="text/template" id="college">
                 <div id="{college.canonical_name}">
                     <h4 class="capitalize">
