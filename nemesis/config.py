@@ -4,6 +4,8 @@ import logging
 import logging.config
 import os.path
 
+# pylint: disable=global-statement
+
 config = None
 
 _logging_configured = False

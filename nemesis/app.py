@@ -45,7 +45,7 @@ def index():
     # https://github.com/pallets/werkzeug/issues/360); fixed in 0.9.8 though we
     # don't have access to that version yet.
     if request.environ['PATH_INFO'] != '/':
-       return redirect(url_for('.index'), code=302)
+        return redirect(url_for('.index'), code=302)
 
     text = open(PATH + '/templates/index.html').read()
     text = text.replace('$ACTIVATION_DAYS$', str(ACTIVATION_DAYS))
@@ -131,8 +131,8 @@ def user_details(userid):
     details = user.details_dictionary_for(ah.user)
 
     if 'email' in details:
-        """Then the requesting user can view the emails -- also tell them
-        about any pending changes."""
+        # The requesting user can view the emails -- also tell them
+        # about any pending changes.
         email_change_rq = PendingEmail(user.username)
         if email_change_rq.in_db:
             new_email = email_change_rq.new_email

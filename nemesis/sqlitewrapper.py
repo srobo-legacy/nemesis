@@ -17,11 +17,11 @@ class KeyedSqliteThing(object):
     _db_required_props = []
     _db_optional_props = []
 
-    def __init__(self, id = None, connector = None, auto_props = []):
-        self._id = id
+    def __init__(self, id_ = None, connector = None, auto_props = None):
+        self._id = id_
         self._connector = connector or sqlite_connect
         self._conn = None
-        self._db_auto_props = auto_props
+        self._db_auto_props = auto_props or []
         self._props = {}
         self._in_db = False
         if id is not None:
@@ -135,7 +135,7 @@ class UsernameKeyedSqliteThing(KeyedSqliteThing):
 
     _id_key = 'username'
 
-    def __init__(self, username, connector, auto_props = []):
+    def __init__(self, username, connector, auto_props = None):
         super(UsernameKeyedSqliteThing, self).__init__(username, connector, auto_props)
 
     @property
@@ -143,8 +143,8 @@ class UsernameKeyedSqliteThing(KeyedSqliteThing):
         return self._id
 
 class AgedKeyedSqliteThing(KeyedSqliteThing):
-    def __init__(self, birth_time_prop, id, connector):
-        super(AgedKeyedSqliteThing, self).__init__(id, connector, [birth_time_prop])
+    def __init__(self, birth_time_prop, id_, connector):
+        super(AgedKeyedSqliteThing, self).__init__(id_, connector, [birth_time_prop])
         self._birth_time_prop = birth_time_prop
 
     def _get_time_property(self, name):
@@ -210,15 +210,15 @@ class PendingSend(AgedKeyedSqliteThing):
         cur.execute("SELECT id FROM outbox WHERE retry_count<? AND sent_time is null ORDER BY request_time ASC LIMIT ?", args)
         rows = cur.fetchall()
         for row in rows:
-            id = row[0]
-            yield PendingSend(id, connector)
+            id_ = row[0]
+            yield PendingSend(id_, connector)
 
     _db_table = 'outbox'
     _db_required_props = ['toaddr', 'template_name', 'template_vars_json']
     _db_optional_props = ['last_error', 'retry_count', 'sent_time']
 
-    def __init__(self, id = None, connector = None):
-        super(PendingSend, self).__init__('request_time', id, connector)
+    def __init__(self, id_ = None, connector = None):
+        super(PendingSend, self).__init__('request_time', id_, connector)
 
     @property
     def retry_count(self):
@@ -228,14 +228,14 @@ class PendingSend(AgedKeyedSqliteThing):
     def template_vars(self):
         raw = self._props.get('template_vars_json', None)
         if raw is not None:
-            vars = json.loads(raw)
-            return vars
+            template_vars = json.loads(raw)
+            return template_vars
         return None
 
     @template_vars.setter
     def template_vars(self, value):
-        str = json.dumps(value)
-        self._props['template_vars_json'] = str
+        json_str = json.dumps(value)
+        self._props['template_vars_json'] = json_str
 
     @property
     def is_sent(self):
