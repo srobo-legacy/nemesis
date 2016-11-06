@@ -99,6 +99,17 @@ function handle_hash() {
                 wv.hide();
             }, true);
         }
+    } else if (location.hash.substring(1,8) == "college") {
+        var college_name = location.hash.substring(9);
+        var college = Colleges[college_name];
+        if (!college) {
+            return;
+        }
+        wv.start("Loading college");
+        college.fetch(function(c) {
+            clv.render_colleges([c], !current_user.is_student);
+            wv.hide();
+        });
     }
 }
 
