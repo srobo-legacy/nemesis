@@ -29,7 +29,7 @@ def is_email_valid(email):
         str(email)
     except:
         return False
-    return re.match('.+@.+\...+', email)
+    return re.match(r'.+@.+\...+', email)
 
 def is_name_valid(name):
     if len(name) == 0:
