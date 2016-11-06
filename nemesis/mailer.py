@@ -47,14 +47,14 @@ def load_template(template_name, template_vars):
     return subject, msg
 
 def send_email_template(toaddr, template_name, template_vars):
-    logging.info("about to send '{0}' to '{1}'.".format(template_name, toaddr))
+    logging.info("about to send '%s' to '%s'.", template_name, toaddr)
 
     subject, msg = load_template(template_name, template_vars)
 
     return send_email(toaddr, subject, msg)
 
 def store_template(toaddr, template_name, template_vars):
-    logging.debug("storing pending email: '{0}' to '{1}'.".format(template_name, toaddr))
+    logging.debug("storing pending email: '%s' to '%s'.", template_name, toaddr)
     ps = sqlitewrapper.PendingSend()
     ps.toaddr = toaddr
     ps.template_name = template_name
@@ -66,11 +66,11 @@ def try_send(ps):
     try:
         send_email_template(ps.toaddr, ps.template_name, ps.template_vars)
         ps.mark_sent()
-        logging.info("sent '{0}' to '{1}'.".format(ps.template_name, ps.toaddr))
+        logging.info("sent '%s' to '%s'.", ps.template_name, ps.toaddr)
     except:
         ps.retried()
         ps.last_error = traceback.format_exc()
-        logging.exception("while sending {0}.".format(ps))
+        logging.exception("while sending %s.", ps)
     finally:
         ps.save()
 
