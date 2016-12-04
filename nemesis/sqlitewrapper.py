@@ -7,9 +7,11 @@ import sqlite3
 from config import config
 import mailer
 
+
 PATH = os.path.dirname(os.path.abspath(__file__))
 def sqlite_connect():
     return sqlite3.connect(PATH + "/db/nemesis.sqlite")
+
 
 class KeyedSqliteThing(object):
 
@@ -122,6 +124,7 @@ class KeyedSqliteThing(object):
                 self._id = lastid
             self._in_db = True
 
+
 class UsernameKeyedSqliteThing(KeyedSqliteThing):
     @classmethod
     def ListAll(cls, connector = None):
@@ -141,6 +144,7 @@ class UsernameKeyedSqliteThing(KeyedSqliteThing):
     @property
     def username(self):
         return self._id
+
 
 class AgedKeyedSqliteThing(KeyedSqliteThing):
     def __init__(self, birth_time_prop, id_, connector):
@@ -167,9 +171,11 @@ class AgedKeyedSqliteThing(KeyedSqliteThing):
             age = datetime.utcnow() - birth
             return age
 
+
 class AgedUsernameKeyedSqliteThing(AgedKeyedSqliteThing, UsernameKeyedSqliteThing):
     def __init__(self, birth_time_prop, username, connector):
         super(AgedUsernameKeyedSqliteThing, self).__init__(birth_time_prop, username, connector)
+
 
 class PendingEmail(AgedUsernameKeyedSqliteThing):
     _db_table = 'email_changes'
@@ -185,6 +191,7 @@ class PendingEmail(AgedUsernameKeyedSqliteThing):
 
         mailer.email_template(self.new_email, 'change_email', email_vars)
 
+
 class PendingUser(AgedUsernameKeyedSqliteThing):
     _db_table = 'registrations'
     _db_required_props = ['teacher_username', 'college', 'team', 'email', 'verify_code']
@@ -199,6 +206,7 @@ class PendingUser(AgedUsernameKeyedSqliteThing):
                      }
 
         mailer.email_template(self.email, 'new_user', email_vars)
+
 
 class PendingSend(AgedKeyedSqliteThing):
     @classmethod
