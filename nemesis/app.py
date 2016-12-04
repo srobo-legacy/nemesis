@@ -23,6 +23,7 @@ config.configure_logging()
 app = Flask(__name__)
 
 ACTIVATION_DAYS = config.config.getint('nemesis', 'activation_days')
+PASSWORD_RESET_DAYS = config.config.getint('nemesis', 'password_reset_days')
 
 PLAINTEXT_HEADER = {'Content-Type': 'text/plain'}
 
@@ -64,6 +65,7 @@ def index():
 
     text = open(PATH + '/templates/index.html').read()
     text = text.replace('$ACTIVATION_DAYS$', str(ACTIVATION_DAYS))
+    text = text.replace('$PASSWORD_RESET_DAYS$', str(PASSWORD_RESET_DAYS))
     return text, 200, CSP_HEADER
 
 
@@ -362,10 +364,7 @@ def reset_password(username, code):
     if not ppr.in_db:
         return "No such user account", 404, PLAINTEXT_HEADER
 
-    password_reset_days = config.config.getint('nemesis', 'password_reset_days')
-    max_age = timedelta(days = password_reset_days)
-
-    if ppr.age > max_age:
+    if ppr.age > timedelta(days = PASSWORD_RESET_DAYS):
         return "Request not valid", 410, PLAINTEXT_HEADER
 
     if ppr.verify_code != code:
