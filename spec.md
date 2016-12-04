@@ -181,6 +181,7 @@ if 403.
 The usual authentication error conditions apply, any other response data is
 unspecified and should not be used.
 
+
 ##POST /registrations
 
 Used to register new users. Specifically posting to this endpoint inserts one
