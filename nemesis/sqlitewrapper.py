@@ -186,7 +186,7 @@ class PendingEmail(AgedUsernameKeyedSqliteThing):
 
     def send_verification_email(self, first_name, verification_url):
         email_vars = { 'name': first_name,
-            'activation_days': config.getint('nemesis', 'activation_days'),
+          'email_change_days': config.getint('nemesis', 'email_change_days'),
                         'url': verification_url }
 
         mailer.email_template(self.new_email, 'change_email', email_vars)
