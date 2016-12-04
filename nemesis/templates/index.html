@@ -131,8 +131,10 @@
                         <label>Email{email_comment}</label>
                         <input required type="text" value="{user.email}" name="new_email">
                     </div>
-                    <label>Password</label>
-                    <input type="password" name="new_password">
+                    <div id="new-password">
+                        <label>Password</label>
+                        <input type="password" name="new_password">
+                    </div>
                     <label>Team(s)</label>
                     {html:team_select}
                     <label>Type</label>
@@ -147,6 +149,11 @@
                     </button>
                     <button type="submit" class="btn" id="edit-cancel-email-change">Cancel Email Change</button>
                 </fieldset>
+                </form>
+                <hr>
+                <form id="user_password_reset_form">
+                    <button type="submit" class="btn">Reset password</button>
+                    <p><small>{user.first_name} will be emailed a link to reset their password, which will be valid for $PASSWORD_RESET_DAYS$ days.</small></p>
                 </form>
             </script>
 

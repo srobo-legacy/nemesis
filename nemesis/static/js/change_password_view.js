@@ -1,4 +1,4 @@
-var ActivateView = function() {
+var ChangePasswordView = function() {
     return function(jquerynode, user) {
         var jquerynode = jquerynode;
         var that = this;

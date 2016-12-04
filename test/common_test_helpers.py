@@ -23,6 +23,7 @@ def delete_db():
     cur.execute("DELETE FROM registrations")
     cur.execute("DELETE FROM email_changes")
     cur.execute("DELETE FROM outbox")
+    cur.execute("DELETE FROM password_resets")
     conn.commit()
 
 def get_registrations():

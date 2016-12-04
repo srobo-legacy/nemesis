@@ -13,7 +13,7 @@ $(document).ready(function() {
 
     current_user = new User(init_data.username);
 
-    av = new ActivateView($('#data-user-set-password'), current_user);
+    av = new ChangePasswordView($('#data-user-set-password'), current_user);
 
     current_user.login(init_data.password, function(user) {
         av.show(user);

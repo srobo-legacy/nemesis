@@ -151,7 +151,9 @@ be cancelled by setting this to the user's current email.
   * the authenticated user is a team-leader of the user specified by :username,
   * and the authenticated user is a member of the new team,
   * and the user specified by :username is not a blueshirt.
-* `new_password` optional: the new password for the user.
+* `new_password` optional: the new password for the user. Use of this field
+    by users other than the target user is deprecated and may become disallowed
+    in a future version.
 * `new_first_name` optional: the new first name for the user. Note that
     students are not permitted to update names, so this value will be ignored
     if the authenticated user is a student (the request will otherwise appear to succeed).
@@ -175,6 +177,26 @@ be cancelled by setting this to the user's current email.
 
 The same as the response code for `GET /user/:username`. No update is performed
 if 403.
+
+####Response body
+
+The usual authentication error conditions apply, any other response data is
+unspecified and should not be used.
+
+
+##POST /send-password-reset/:username
+
+Used to reset a user's password. Specifically posting to this endpoint
+sends the user an email contianing a single-use link to reset their password.
+
+####Parameters
+
+None
+
+####Response code
+
+202 if the authenticated user can administrate the target user.
+Otherwise 403.
 
 ####Response body
 
