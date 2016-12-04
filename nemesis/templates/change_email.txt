@@ -9,7 +9,7 @@ you want to make the change.
 If you don't want the change to occur, you need not do anything -- the link
 will expire in {email_change_days} days.
 
-{url}
+	{url}
 
 The Student Robotics Team.
 
