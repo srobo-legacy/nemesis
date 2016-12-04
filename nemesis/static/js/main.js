@@ -33,7 +33,7 @@ $(document).ready(function() {
             if (user.colleges.length <= 1) {
                 window.location = '#my-colleges';
             } else {
-                // users with a large number of teams just get a summary table
+                // users with a large number of colleges initially get a summary table
                 window.location = '#colleges-overview';
                 $('.overview-links').show();
             }
