@@ -88,10 +88,12 @@ var EditView = function() {
                 }
                 if (my_requesting_user.username != user.username) {
                     $('#new-password').hide();
-                    $('#user_password_reset_form').show().submit(function(event) {
+                    $('#user_password_reset_form').submit(function(event) {
                         that.send_password_reset(user);
                         event.preventDefault();
                     });
+                } else {
+                    $('#user_password_reset_form').hide();
                 }
                 wv.end("Loaded user successfully!");
                 $("#user_edit_form").submit(function(event) {
