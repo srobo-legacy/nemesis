@@ -42,14 +42,14 @@ def ensure_str(string):
         return string.encode('utf-8')
     return string
 
-def create_verify_code(username, new_email):
+def create_verify_code(username, string_data):
     """
     An increadibly weak way of generating a 'random' looking string which
-    we can use to verify the authenticity of an email address.
+    we can use to verify the authenticity of an emailed link.
     The aim here is mostly to check that it exists, so absolute security
     isn't strictly needed. The overall length is 160 characters.
     """
-    combined = ensure_str(username) + ensure_str(new_email)
+    combined = ensure_str(username) + ensure_str(string_data)
     user_part = hashlib.md5(combined).hexdigest()
     random_part = hex(random.getrandbits(128))[2:-1]
     code = random_part + user_part
