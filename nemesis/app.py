@@ -17,7 +17,7 @@ from flask import Flask, request, redirect, url_for
 from datetime import timedelta
 
 from libnemesis import User, College, AuthHelper
-from sqlitewrapper import PendingEmail, PendingUser
+from sqlitewrapper import PendingEmail, PendingPasswordReset, PendingUser
 
 config.configure_logging()
 app = Flask(__name__)
@@ -140,7 +140,24 @@ def send_password_reset(requesting_user, userid):
     if not requesting_user.can_administrate(user_to_update):
         return AUTHORIZATION_DENIED
 
-    return "{}", 501
+    verify_code = helpers.create_verify_code(user_to_update.username, requesting_user.username)
+
+    ppr = PendingPasswordReset(user_to_update.username)
+    ppr.requestor_username = requesting_user.username
+    ppr.verify_code = verify_code
+    ppr.save()
+
+    log_action('sending password reset', ppr)
+
+    url = url_for('reset_password', username=user_to_update.username, code=verify_code, _external=True)
+    ppr.send_reset_email(
+        user_to_update.email,
+        user_to_update.first_name,
+        url,
+        "{0} {1}".format(requesting_user.first_name, requesting_user.last_name),
+    )
+
+    return "{}", 202
 
 
 @app.route("/user/<userid>", methods=["GET"])
@@ -322,6 +339,53 @@ def activate_account(username, code):
                    ,  'last_name': u.last_name
                    ,   'password': new_pass
                    ,      'email': u.email
+                   ,   'username': username
+                   ,       'root': url_for('.index')
+                   }
+
+    html = html.format(**replacements)
+
+    return html, 200, CSP_HEADER
+
+
+
+@app.route("/reset_password/<username>/<code>", methods=["GET"])
+def reset_password(username, code):
+    """
+    Resets a user's password after they've clicked a link in an email we
+    sent them, then serves up a page for them to change their password.
+    Not part of the documented API.
+    """
+
+    ppr = PendingPasswordReset(username)
+
+    if not ppr.in_db:
+        return "No such user account", 404, PLAINTEXT_HEADER
+
+    password_reset_days = config.config.getint('nemesis', 'password_reset_days')
+    max_age = timedelta(days = password_reset_days)
+
+    if ppr.age > max_age:
+        return "Request not valid", 410, PLAINTEXT_HEADER
+
+    if ppr.verify_code != code:
+        return "Invalid verification code", 403, PLAINTEXT_HEADER
+
+    log_action('resetting user password', ppr)
+
+    from libnemesis import srusers
+    new_pass = srusers.users.GenPasswd()
+
+    u = User(username)
+    u.set_password(new_pass)
+    # No need to save since set_password happens immediately
+
+    ppr.delete()
+
+    html = open(PATH + "/templates/password_reset.html").read()
+    replacements = { 'first_name': u.first_name
+                   ,  'last_name': u.last_name
+                   ,   'password': new_pass
                    ,   'username': username
                    ,       'root': url_for('.index')
                    }
