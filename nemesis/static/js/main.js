@@ -35,6 +35,11 @@ $(document).ready(function() {
             } else {
                 // users with a large number of colleges initially get a summary table
                 window.location = '#colleges-overview';
+                if (user.colleges.length > 3) {
+                    // users with a _lot_ of colleges don't get to see
+                    // them all in one go as it's really slow
+                    $('#my-colleges-link').hide();
+                }
                 $('.overview-links').show();
             }
         },
