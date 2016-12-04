@@ -102,3 +102,6 @@ class SendPasswordResetTests(unittest.TestCase):
             self.assertTrue(user.is_authenticated, "Wrong password ({0}) found in page!".format(new_password))
         finally:
             User(username).set_password('cows')
+
+        ppr = PendingPasswordReset('student_coll1_1')
+        self.assertFalse(ppr.in_db, "{0} should no longer in the database.".format(ppr))
