@@ -180,10 +180,10 @@ def notify_ticket_available(user):
 @app.route("/user/<userid>", methods=["POST"])
 @auth_required
 def set_user_details(requesting_user, userid):
-    can_admin = requesting_user.can_administrate(userid)
+    user_to_update = User.create_user(userid)
+    can_admin = requesting_user.can_administrate(user_to_update)
 
     if request.form.get("media_consent") == 'true' and requesting_user.can_record_media_consent:
-        user_to_update = User.create_user(userid)
         if not user_to_update.has_media_consent:
             user_to_update.got_media_consent()
             notify_ticket_available(user_to_update)
