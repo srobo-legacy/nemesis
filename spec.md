@@ -1,6 +1,6 @@
 #Nemesis REST API spec
 
-##Version 3.8.0 [SemVer](http://semver.org/)
+##Version 3.8.1 [SemVer](http://semver.org/)
 
 This document explains all the Nemesis API endpoints. The production version of
 this API runs on http://studentrobotics.org/userman. URL components are of the
@@ -145,7 +145,7 @@ Updates information about the user specified in the URL parameter `username`.
   email is only performed if the authenticated user is the user specified by
 :username or the authenticated user is a team-leader of the user specified by
 :username. Changes to email address require validation. Change requests can
-be cancelled by setting this to the users' current email.
+be cancelled by setting this to the user's current email.
 * `new_team` optional: the new team for the user. An update of the team
   is only performed if:
   * the authenticated user is a team-leader of the user specified by :username,
