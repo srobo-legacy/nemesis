@@ -86,6 +86,13 @@ var EditView = function() {
                         that.withdraw_user();
                     });
                 }
+                if (my_requesting_user.username != user.username) {
+                    $('#new-password').hide();
+                    $('#user_password_reset_form').show().submit(function(event) {
+                        that.send_password_reset(user);
+                        event.preventDefault();
+                    });
+                }
                 wv.end("Loaded user successfully!");
                 $("#user_edit_form").submit(function(event) {
                     that.submit_form();
@@ -125,6 +132,13 @@ var EditView = function() {
             }
             wv.start("Withdrawing user");
             $.post("user/" + my_user.username, {'withdrawn': true}, function (response) {
+                that.refresh_all();
+            });
+        };
+
+        this.send_password_reset = function() {
+            wv.start("Sending reset password email");
+            $.post("send-password-reset/" + my_user.username, function (response) {
                 that.refresh_all();
             });
         };

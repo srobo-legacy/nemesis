@@ -133,6 +133,16 @@ def register_user(requesting_user):
     return "{}", 202
 
 
+@app.route("/send-password-reset/<userid>", methods=["POST"])
+@auth_required
+def send_password_reset(requesting_user, userid):
+    user_to_update = User.create_user(userid)
+    if not requesting_user.can_administrate(user_to_update):
+        return AUTHORIZATION_DENIED
+
+    return "{}", 501
+
+
 @app.route("/user/<userid>", methods=["GET"])
 @auth_required
 def user_details(requesting_user, userid):
