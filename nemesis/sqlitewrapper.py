@@ -198,6 +198,23 @@ class PendingEmail(AgedUsernameKeyedSqliteThing):
         mailer.email_template(self.new_email, 'change_email', email_vars)
 
 
+class PendingPasswordReset(AgedUsernameKeyedSqliteThing):
+    _db_table = 'password_resets'
+    _db_required_props = ['requestor_username', 'verify_code']
+
+    def __init__(self, username, connector = None):
+        super(PendingPasswordReset, self).__init__('request_time', username, connector)
+
+    def send_reset_email(self, email, first_name, password_reset_url, requestor_name):
+        email_vars = { 'name': first_name,
+             'requestor_name': requestor_name,
+        'password_reset_days': config.getint('nemesis', 'password_reset_days'),
+         'password_reset_url': password_reset_url
+                     }
+
+        mailer.email_template(email, 'password_reset', email_vars)
+
+
 class PendingUser(AgedUsernameKeyedSqliteThing):
     _db_table = 'registrations'
     _db_required_props = ['teacher_username', 'college', 'team', 'email', 'verify_code']
