@@ -16,6 +16,7 @@ def sqlite_connect():
 class KeyedSqliteThing(object):
 
     _id_key = 'id'
+    _db_table = None
     _db_required_props = []
     _db_optional_props = []
 
@@ -26,6 +27,11 @@ class KeyedSqliteThing(object):
         self._db_auto_props = auto_props or []
         self._props = {}
         self._in_db = False
+
+        if self._db_table is None:
+            type_ = self.__class__.__name__
+            raise ValueError("{0} must define a suitable _db_table.".format(type_))
+
         if id is not None:
             self._load()
 
