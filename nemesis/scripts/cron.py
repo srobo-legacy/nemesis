@@ -12,5 +12,6 @@ import helpers
 if __name__ == "__main__":
     config.configure_logging()
     helpers.clear_old_emails()
+    helpers.clear_old_password_resets()
     helpers.clear_old_registrations()
     #helpers.send_emails()

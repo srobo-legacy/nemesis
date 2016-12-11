@@ -10,7 +10,7 @@ from unidecode import unidecode
 
 from config import config
 import mailer
-from sqlitewrapper import PendingEmail, PendingSend, PendingUser
+from sqlitewrapper import PendingEmail, PendingPasswordReset, PendingSend, PendingUser
 
 PATH = os.path.dirname(os.path.abspath(__file__))
 
@@ -80,6 +80,18 @@ def clear_old_emails():
         if pe.age > max_age:
             log_action('expiring email change', pe)
             pe.delete()
+
+def clear_old_password_resets():
+    # deliberately a larger delta than we restrict against to avoid
+    # accidentally removing vaild entries
+    password_reset_days = config.getint('nemesis', 'password_reset_days')
+    password_reset_days += 0.5
+    max_age = timedelta(days = password_reset_days)
+
+    for ppr in PendingPasswordReset.ListAll():
+        if ppr.age > max_age:
+            log_action('expiring password reset', ppr)
+            ppr.delete()
 
 def inform_competitor_registration_expired(user_email, expired_user):
 

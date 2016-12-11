@@ -12,7 +12,7 @@ sys.path.insert(0,os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from common_test_helpers import delete_db, last_n_emails, assert_load_template
 
 import helpers
-from sqlitewrapper import PendingUser, PendingEmail, sqlite_connect
+from sqlitewrapper import PendingUser, PendingPasswordReset, PendingEmail, sqlite_connect
 
 from libnemesis import srusers, User
 
@@ -57,6 +57,27 @@ class TestHelpers(unittest.TestCase):
 
         pe = PendingEmail('abc')
         assert pe.in_db
+
+    def test_clear_old_password_resets(self):
+        ppr = PendingPasswordReset('old')
+        ppr.requestor_username = 'blueshirt'
+        ppr.verify_code = 'bibble-old'
+        ppr.save()
+
+        self._make_old('password_resets', 'old')
+
+        ppr = PendingPasswordReset('abc')
+        ppr.requestor_username = 'blueshirt'
+        ppr.verify_code = 'bibble-new'
+        ppr.save()
+
+        helpers.clear_old_password_resets()
+
+        ppr = PendingPasswordReset('old')
+        assert not ppr.in_db
+
+        ppr = PendingPasswordReset('abc')
+        assert ppr.in_db
 
     def test_clear_old_registrations(self):
         first_name = 'old'
