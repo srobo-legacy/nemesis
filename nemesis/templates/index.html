@@ -152,7 +152,7 @@
                 </form>
                 <hr>
                 <form id="user_password_reset_form">
-                    <button type="submit" class="btn">Send password reset</button>
+                    <button type="submit" class="btn" {html:disabled.update-user}>Send password reset</button>
                     <p><small>{user.first_name} will be emailed a link to reset their password, which will be valid for $PASSWORD_RESET_DAYS$ days.</small></p>
                 </form>
             </script>
