@@ -21,11 +21,13 @@ if __name__ == "__main__":
     parser.add_argument(
         '--limit',
         default=50,
+        type=int,
         help="The maximum number of emails to send (default: %(default)s).",
     )
     parser.add_argument(
         '--max-retries',
         default=5,
+        type=int,
         help="The maximum number of retries to allow before considering an email"
              " abandoned (default: %(default)s).",
     )
