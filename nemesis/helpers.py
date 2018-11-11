@@ -126,7 +126,7 @@ def clear_old_registrations():
             team_leader = User(pu.teacher_username)
             inform_team_lead_registration_expired(team_leader, expired)
 
-def send_emails(limit = 50):
-    unsent_mails = PendingSend.Unsent(max_results = limit)
+def send_emails(limit = 50, max_retry = 5):
+    unsent_mails = PendingSend.Unsent(max_retry=max_retry, max_results=limit)
     for ps in unsent_mails:
         mailer.try_send(ps)
