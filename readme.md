@@ -1,10 +1,10 @@
-#Nemesis
+# Nemesis
 
 This is Nemesis, a system for allowing team leaders running teams for the
 [Student Robotics](http://studentrobotics.org) (SR) competition to administrate
 the user accounts of the team (including their own).
 
-##Contributing
+## Contributing
 
 Please file issues on Student Robotics [trac](http://trac.srobo.org) if you can.
 If you can't, please raise issues on GitHub instead, but be aware they'll
@@ -14,7 +14,7 @@ Patches should be submitted to SR's [gerrit](http://gerrit.srobo.org) if
 possible, but GitHub pull requests (to @PeterJCLaw) are OK if you can't do this.
 These are likely to be moved to gerrit for handling.
 
-##Development on a clone of the deployment server
+## Development on a clone of the deployment server
 
 1. Get an srobo dev server [here](http://github.com/samphippen/badger-vagrant)
 2. You've got nemesis in `/srv/nemesis`
@@ -26,7 +26,7 @@ These are likely to be moved to gerrit for handling.
 Once you've greenlit all the tests, make some changes, go wild, send me patches
 either via GitHub or via gerrit and I'll review them for you!
 
-##Development server, avoiding WSGI
+## Development server, avoiding WSGI
 
 It's also possible to develop using the srobo dev server just as the LDAP host.
 For this, you'll need to install python, nose, python sqlite3, pyldap & flask
