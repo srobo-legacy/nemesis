@@ -1,6 +1,6 @@
-#Nemesis REST API spec
+# Nemesis REST API spec
 
-##Version 3.8.1 [SemVer](https://semver.org/)
+## Version 3.8.1 [SemVer](https://semver.org/)
 
 This document explains all the Nemesis API endpoints. The production version of
 this API runs on https://studentrobotics.org/userman. URL components are of the
@@ -51,40 +51,40 @@ additional read access to some values. The details of this are deliberately
 not specified here as they may change as the requirements of the system's
 users change.
 
-##GET /colleges
+## GET /colleges
 
 Gives a list of all colleges
 
-####Parameters
+#### Parameters
 
 None
 
-####Response code
+#### Response code
 
 200 if the user authenticates successfully and is a blueshirt, else 403
 
-####Response body
+#### Response body
 
 The object contains:
 
 * `colleges`: a list of all the college ids
 
 
-##GET /colleges/:id
+## GET /colleges/:id
 
 Gives information about the college matching the `id` url parameter
 
-####Parameters
+#### Parameters
 
 None
 
-####Response code
+#### Response code
 
 200 if the user authenticates successfully and is a member of the college,
 200 if the user authenticates successfully and is a blueshirt
 else 403.
 
-####Response body
+#### Response body
 
 If the response code is 200 the object contains:
 
@@ -100,20 +100,20 @@ If the response code is 200 the object contains:
     * `withdrawn`: the number of withdrawn users in the college.
 
 
-##GET /user/:username
+## GET /user/:username
 
 Gets information about the user specified in the URL parameter `username`.
 
-####Parameters
+#### Parameters
 
 No parameters
 
-####Response code
+#### Response code
 
 200 if the user authenticates successfully and the authenticated user
 can administrate the user specified by `:username`. 403 otherwise.
 
-####Response body
+#### Response body
 
 If the response code is 200:
 
@@ -135,11 +135,11 @@ If the response code is 200:
 * `has_withdrawn`: a boolean indicating whether the user has withdrawn.
 
 
-##POST /user/:username
+## POST /user/:username
 
 Updates information about the user specified in the URL parameter `username`.
 
-####Parameters
+#### Parameters
 
 * `new_email` optional: the new email address for the user. An update of the
   email is only performed if the authenticated user is the user specified by
@@ -173,45 +173,45 @@ be cancelled by setting this to the user's current email.
     media consent. For this to have any effect, the requesting user must be a blueshirt
     with media-consent privileges.
 
-####Response code
+#### Response code
 
 The same as the response code for `GET /user/:username`. No update is performed
 if 403.
 
-####Response body
+#### Response body
 
 The usual authentication error conditions apply, any other response data is
 unspecified and should not be used.
 
 
-##POST /send-password-reset/:username
+## POST /send-password-reset/:username
 
 Used to reset a user's password. Specifically posting to this endpoint
 sends the user an email contianing a single-use link to reset their password.
 
-####Parameters
+#### Parameters
 
 None
 
-####Response code
+#### Response code
 
 202 if the authenticated user can administrate the target user.
 Otherwise 403.
 
-####Response body
+#### Response body
 
 The usual authentication error conditions apply, any other response data is
 unspecified and should not be used.
 
 
-##POST /registrations
+## POST /registrations
 
 Used to register new users. Specifically posting to this endpoint inserts one
 user into the registration queue. The new user will be emailed to activate
 their account, and the requesting user will be emailed a summary of the
 new account's details.
 
-####Parameters
+#### Parameters
 
 * `first_name`: the user's first name.
 * `last_name`: the user's last name.
@@ -219,14 +219,14 @@ new account's details.
 * `college`: the college to register the user to.
 * `team`: the team to register the user to.
 
-####Response code
+#### Response code
 
 202 if the authenticated user is a member of the specified college and the
 specified college has the specified team and the authenticated user is a
 blueshirt or a team-leader and the requested user details are not already
 in use. Otherwise 403.
 
-####Response body
+#### Response body
 
 The usual authentication error conditions apply. Other errors are detailed
 via a single `error` key in the returned json object. Its values possible
