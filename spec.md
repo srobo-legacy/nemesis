@@ -1,9 +1,9 @@
 #Nemesis REST API spec
 
-##Version 3.8.1 [SemVer](http://semver.org/)
+##Version 3.8.1 [SemVer](https://semver.org/)
 
 This document explains all the Nemesis API endpoints. The production version of
-this API runs on http://studentrobotics.org/userman. URL components are of the
+this API runs on https://studentrobotics.org/userman. URL components are of the
 form `:something` represent URL parameters.
 
 All response bodies are JSON objects, and their keys are explained in the

@@ -99,7 +99,7 @@ def test_delete():
 @with_setup(test_helpers.delete_db, test_helpers.delete_db)
 def test_send_email():
     first_name = 'jim'
-    verification_url = 'http://verify'
+    verification_url = 'https://verify'
     new_email = 'new_email@example.com'
     pe = PendingEmail('abc')
     pe.new_email = new_email

@@ -1,7 +1,7 @@
 # Nemesis
 
 This is Nemesis, a system for allowing team leaders running teams for the
-[Student Robotics](http://studentrobotics.org) (SR) competition to administrate
+[Student Robotics](https://studentrobotics.org) (SR) competition to administrate
 the user accounts of the team (including their own).
 
 ## Contributing
@@ -16,7 +16,7 @@ These are likely to be moved to gerrit for handling.
 
 ## Development on a clone of the deployment server
 
-1. Get an srobo dev server [here](http://github.com/samphippen/badger-vagrant)
+1. Get an srobo dev server [here](https://github.com/samphippen/badger-vagrant)
 2. You've got nemesis in `/srv/nemesis`
 3. Run the current set of valid tests using the `./run-tests` script.
 4. There are some obsolete javascript client tests in `test/client-tests`.
